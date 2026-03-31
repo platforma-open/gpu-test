@@ -21,6 +21,21 @@ export const model = BlockModel.create()
 
 export interface GpuReport {
   gpu_available: boolean;
+  cupy: {
+    available: boolean;
+    device_count: number;
+    cuda_version: string | null;
+    devices: Array<{
+      index: number;
+      name: string;
+      total_memory_mb: number;
+      free_memory_mb?: number;
+      major: number;
+      minor: number;
+      multi_processor_count: number;
+    }>;
+    error?: string;
+  };
   torch_cuda: {
     available: boolean;
     device_count: number;
@@ -57,11 +72,14 @@ export interface GpuReport {
   environment: Record<string, string | null>;
   benchmark: {
     ran: boolean;
+    backend?: string;
     matrix_size?: number;
     cpu_time_ms?: number;
     gpu_time_ms?: number;
     speedup?: number;
     skipped?: string;
+    cupy_error?: string;
+    torch_error?: string;
     error?: string;
   };
 }

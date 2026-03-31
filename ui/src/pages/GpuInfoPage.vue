@@ -23,6 +23,38 @@ const isRunning = computed(() => app.model.outputs.isRunning);
         {{ gpuInfo.gpu_available ? 'GPU AVAILABLE' : 'GPU NOT AVAILABLE' }}
       </div>
 
+      <section v-if="gpuInfo.cupy.available" class="info-section">
+        <h3>GPU Devices (CuPy / RAPIDS)</h3>
+        <p>CUDA version: {{ gpuInfo.cupy.cuda_version ?? 'N/A' }}</p>
+        <table class="info-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>VRAM</th>
+              <th>Free</th>
+              <th>Compute</th>
+              <th>SMs</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="dev in gpuInfo.cupy.devices" :key="dev.index">
+              <td>{{ dev.index }}</td>
+              <td>{{ dev.name }}</td>
+              <td>{{ dev.total_memory_mb }} MB</td>
+              <td>{{ dev.free_memory_mb }} MB</td>
+              <td>{{ dev.major }}.{{ dev.minor }}</td>
+              <td>{{ dev.multi_processor_count }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section v-if="!gpuInfo.cupy.available" class="info-section">
+        <h3>CuPy (RAPIDS)</h3>
+        <p>Not available{{ gpuInfo.cupy.error ? ': ' + gpuInfo.cupy.error : '' }}</p>
+      </section>
+
       <section v-if="gpuInfo.torch_cuda.available" class="info-section">
         <h3>GPU Devices (PyTorch CUDA)</h3>
         <p>CUDA version: {{ gpuInfo.torch_cuda.cuda_version }} | cuDNN: {{ gpuInfo.torch_cuda.cudnn_version ?? 'N/A' }}</p>
@@ -88,9 +120,13 @@ const isRunning = computed(() => app.model.outputs.isRunning);
       </section>
 
       <section v-if="gpuInfo.benchmark.ran" class="info-section">
-        <h3>Benchmark ({{ gpuInfo.benchmark.matrix_size }}x{{ gpuInfo.benchmark.matrix_size }} matrix multiply)</h3>
+        <h3>Benchmark ({{ gpuInfo.benchmark.matrix_size }}x{{ gpuInfo.benchmark.matrix_size }} matrix multiply, {{ gpuInfo.benchmark.backend }})</h3>
         <table class="info-table">
           <tbody>
+            <tr>
+              <td>Backend</td>
+              <td>{{ gpuInfo.benchmark.backend }}</td>
+            </tr>
             <tr>
               <td>CPU time</td>
               <td>{{ gpuInfo.benchmark.cpu_time_ms }} ms</td>
@@ -105,6 +141,11 @@ const isRunning = computed(() => app.model.outputs.isRunning);
             </tr>
           </tbody>
         </table>
+      </section>
+
+      <section v-if="gpuInfo.benchmark.skipped" class="info-section">
+        <h3>Benchmark</h3>
+        <p>{{ gpuInfo.benchmark.skipped }}</p>
       </section>
 
       <section v-if="!gpuInfo.torch_cuda.available" class="info-section">
