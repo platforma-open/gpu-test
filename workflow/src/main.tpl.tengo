@@ -9,14 +9,14 @@ wf.body(func(args) {
 		software(gpuInfoSw).
 		cpu(1).
 		mem("2GiB").
-		saveFile("gpu-info.json").
+		saveFileContent("gpu-info.json").
 		saveStdoutStream().
 		run()
 
 	return {
 		outputs: {
 			gpuLog: gpuInfo.getStdoutStream(),
-			gpuInfo: gpuInfo.getFile("gpu-info.json")
+			gpuInfo: gpuInfo.getFileContent("gpu-info.json")
 		},
 		exports: {}
 	}
