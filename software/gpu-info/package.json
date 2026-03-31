@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.gpu-test.gpu-info",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "type": "module",
   "description": "GPU detection and info reporting",
   "scripts": {
