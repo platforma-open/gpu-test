@@ -65,7 +65,7 @@ def detect_nvidia_smi():
     """Detect GPU via nvidia-smi subprocess."""
     query_cmd = [
         "nvidia-smi",
-        "--query-gpu=index,name,memory.total,memory.free,memory.used,temperature.gpu,driver_version,cuda_version",
+        "--query-gpu=index,name,memory.total,memory.free,memory.used,temperature.gpu,driver_version",
         "--format=csv,noheader,nounits",
     ]
 
@@ -92,7 +92,7 @@ def detect_nvidia_smi():
             info["available"] = True
             for line in result.stdout.strip().split("\n"):
                 parts = [p.strip() for p in line.split(",")]
-                if len(parts) >= 8:
+                if len(parts) >= 7:
                     device = {
                         "index": int(parts[0]),
                         "name": parts[1],
@@ -101,7 +101,6 @@ def detect_nvidia_smi():
                         "memory_used_mb": int(parts[4]),
                         "temperature_c": int(parts[5]) if parts[5] != "N/A" else None,
                         "driver_version": parts[6],
-                        "cuda_version": parts[7],
                     }
                     info["devices"].append(device)
                     info["driver_version"] = parts[6]
