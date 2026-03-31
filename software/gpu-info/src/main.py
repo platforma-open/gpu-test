@@ -198,7 +198,9 @@ def run_benchmark(cupy_available, torch_cuda_available, nvidia_smi_available):
             results["skipped"] = "no GPU available"
         return results
 
-    size = 2000
+    size = 8000
+    warmup_iters = 2
+    bench_iters = 5
 
     # Try CuPy benchmark (works in RAPIDS environments)
     if cupy_available:
@@ -209,22 +211,28 @@ def run_benchmark(cupy_available, torch_cuda_available, nvidia_smi_available):
             a_cpu = np.random.randn(size, size).astype(np.float32)
             b_cpu = np.random.randn(size, size).astype(np.float32)
 
-            # CPU benchmark (numpy)
-            start = time.perf_counter()
-            for _ in range(3):
+            # CPU benchmark (numpy) — warmup then measure
+            for _ in range(warmup_iters):
                 np.dot(a_cpu, b_cpu)
-            cpu_time = (time.perf_counter() - start) / 3
+            start = time.perf_counter()
+            for _ in range(bench_iters):
+                np.dot(a_cpu, b_cpu)
+            cpu_time = (time.perf_counter() - start) / bench_iters
 
-            # GPU benchmark (cupy)
+            # GPU benchmark (cupy) — transfer, warmup, then measure
             a_gpu = cp.asarray(a_cpu)
             b_gpu = cp.asarray(b_cpu)
             cp.cuda.Stream.null.synchronize()
 
-            start = time.perf_counter()
-            for _ in range(3):
+            for _ in range(warmup_iters):
                 cp.dot(a_gpu, b_gpu)
                 cp.cuda.Stream.null.synchronize()
-            gpu_time = (time.perf_counter() - start) / 3
+
+            start = time.perf_counter()
+            for _ in range(bench_iters):
+                cp.dot(a_gpu, b_gpu)
+                cp.cuda.Stream.null.synchronize()
+            gpu_time = (time.perf_counter() - start) / bench_iters
 
             results["ran"] = True
             results["backend"] = "cupy"
@@ -245,20 +253,26 @@ def run_benchmark(cupy_available, torch_cuda_available, nvidia_smi_available):
             a_cpu = torch.randn(size, size)
             b_cpu = torch.randn(size, size)
 
-            start = time.perf_counter()
-            for _ in range(3):
+            for _ in range(warmup_iters):
                 torch.mm(a_cpu, b_cpu)
-            cpu_time = (time.perf_counter() - start) / 3
+            start = time.perf_counter()
+            for _ in range(bench_iters):
+                torch.mm(a_cpu, b_cpu)
+            cpu_time = (time.perf_counter() - start) / bench_iters
 
             a_gpu = a_cpu.cuda()
             b_gpu = b_cpu.cuda()
             torch.cuda.synchronize()
 
-            start = time.perf_counter()
-            for _ in range(3):
+            for _ in range(warmup_iters):
                 torch.mm(a_gpu, b_gpu)
                 torch.cuda.synchronize()
-            gpu_time = (time.perf_counter() - start) / 3
+
+            start = time.perf_counter()
+            for _ in range(bench_iters):
+                torch.mm(a_gpu, b_gpu)
+                torch.cuda.synchronize()
+            gpu_time = (time.perf_counter() - start) / bench_iters
 
             results["ran"] = True
             results["backend"] = "pytorch"
