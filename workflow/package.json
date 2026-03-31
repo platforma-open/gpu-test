@@ -1,0 +1,16 @@
+{
+  "name": "@platforma-open/milaboratories.gpu-test.workflow",
+  "version": "0.1.0",
+  "description": "Tengo-based template",
+  "scripts": {
+    "build": "shx rm -rf dist && pl-tengo check && pl-tengo build",
+    "do-pack": "shx rm -f *.tgz && pnpm pack && shx mv *.tgz package.tgz"
+  },
+  "dependencies": {
+    "@platforma-sdk/workflow-tengo": "catalog:",
+    "@platforma-open/milaboratories.gpu-test.gpu-info": "workspace:*"
+  },
+  "devDependencies": {
+    "@platforma-sdk/tengo-builder": "catalog:"
+  }
+}

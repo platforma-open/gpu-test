@@ -1,0 +1,23 @@
+wf := import("@platforma-sdk/workflow-tengo:workflow")
+exec := import("@platforma-sdk/workflow-tengo:exec")
+assets := import("@platforma-sdk/workflow-tengo:assets")
+
+gpuInfoSw := assets.importSoftware("@platforma-open/milaboratories.gpu-test.gpu-info:main")
+
+wf.body(func(args) {
+	gpuInfo := exec.builder().
+		software(gpuInfoSw).
+		cpu(1).
+		mem("2GiB").
+		saveFile("gpu-info.json").
+		saveStdoutStream().
+		run()
+
+	return {
+		outputs: {
+			gpuLog: gpuInfo.getStdoutStream(),
+			gpuInfo: gpuInfo.getFile("gpu-info.json")
+		},
+		exports: {}
+	}
+})
