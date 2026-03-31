@@ -63,23 +63,30 @@ def detect_torch_cuda():
 
 def detect_nvidia_smi():
     """Detect GPU via nvidia-smi subprocess."""
+    query_cmd = [
+        "nvidia-smi",
+        "--query-gpu=index,name,memory.total,memory.free,memory.used,temperature.gpu,driver_version,cuda_version",
+        "--format=csv,noheader,nounits",
+    ]
+
     info = {
         "available": False,
         "driver_version": None,
         "devices": [],
+        "command": " ".join(query_cmd),
     }
 
     try:
         result = subprocess.run(
-            [
-                "nvidia-smi",
-                "--query-gpu=index,name,memory.total,memory.free,memory.used,temperature.gpu,driver_version,cuda_version",
-                "--format=csv,noheader,nounits",
-            ],
+            query_cmd,
             capture_output=True,
             text=True,
             timeout=10,
         )
+
+        info["returncode"] = result.returncode
+        info["stdout"] = result.stdout.strip()
+        info["stderr"] = result.stderr.strip()
 
         if result.returncode == 0:
             info["available"] = True
@@ -99,32 +106,41 @@ def detect_nvidia_smi():
                     info["devices"].append(device)
                     info["driver_version"] = parts[6]
         else:
-            info["error"] = result.stderr.strip() or "nvidia-smi returned non-zero"
+            info["error"] = result.stderr.strip() or f"nvidia-smi returned exit code {result.returncode}"
     except FileNotFoundError:
-        info["error"] = "nvidia-smi not found"
+        info["error"] = "nvidia-smi not found in PATH"
+        info["returncode"] = None
     except subprocess.TimeoutExpired:
-        info["error"] = "nvidia-smi timed out"
+        info["error"] = "nvidia-smi timed out after 10s"
+        info["returncode"] = None
     except Exception as e:
         info["error"] = str(e)
+        info["returncode"] = None
 
     return info
 
 
+GPU_ENV_KEYS = [
+    "CUDA_VISIBLE_DEVICES",
+    "NVIDIA_VISIBLE_DEVICES",
+    "NVIDIA_DRIVER_CAPABILITIES",
+    "NVIDIA_REQUIRE_CUDA",
+    "PLATFORMA_GPU_COUNT",
+    "GPU_DEVICE_ORDINAL",
+    "CUDA_DEVICE_ORDER",
+    "CUDA_HOME",
+    "CUDA_PATH",
+    "LD_LIBRARY_PATH",
+    "PATH",
+]
+
+
 def detect_env_vars():
-    """Collect GPU-related environment variables."""
-    keys = [
-        "CUDA_VISIBLE_DEVICES",
-        "NVIDIA_VISIBLE_DEVICES",
-        "NVIDIA_DRIVER_CAPABILITIES",
-        "PLATFORMA_GPU_COUNT",
-        "GPU_DEVICE_ORDINAL",
-        "CUDA_DEVICE_ORDER",
-    ]
+    """Collect GPU-related environment variables. Reports all searched keys."""
     env = {}
-    for key in keys:
+    for key in GPU_ENV_KEYS:
         val = os.environ.get(key)
-        if val is not None:
-            env[key] = val
+        env[key] = val  # None if not set
     return env
 
 
@@ -204,9 +220,15 @@ def format_report(report):
     smi_info = report["nvidia_smi"]
     lines.append("nvidia-smi")
     lines.append("-" * 40)
+    lines.append(f"  Command:             {smi_info.get('command', 'N/A')}")
     lines.append(f"  Available:           {smi_info['available']}")
+    lines.append(f"  Exit code:           {smi_info.get('returncode', 'N/A')}")
     if smi_info.get("error"):
         lines.append(f"  Error:               {smi_info['error']}")
+    if smi_info.get("stdout"):
+        lines.append(f"  Stdout:              {smi_info['stdout'][:500]}")
+    if smi_info.get("stderr"):
+        lines.append(f"  Stderr:              {smi_info['stderr'][:500]}")
     if smi_info["available"]:
         lines.append(f"  Driver version:      {smi_info['driver_version']}")
         for dev in smi_info["devices"]:
@@ -220,13 +242,13 @@ def format_report(report):
 
     # Environment variables
     env = report["environment"]
-    lines.append("Environment Variables")
+    lines.append("Environment Variables (searched)")
     lines.append("-" * 40)
-    if env:
-        for k, v in env.items():
-            lines.append(f"  {k}: {v}")
-    else:
-        lines.append("  (no GPU-related env vars set)")
+    for k, v in env.items():
+        if v is not None:
+            lines.append(f"  {k} = {v}")
+        else:
+            lines.append(f"  {k} = (not set)")
     lines.append("")
 
     # Benchmark

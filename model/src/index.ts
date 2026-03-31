@@ -40,6 +40,10 @@ export interface GpuReport {
   nvidia_smi: {
     available: boolean;
     driver_version: string | null;
+    command?: string;
+    returncode?: number | null;
+    stdout?: string;
+    stderr?: string;
     devices: Array<{
       index: number;
       name: string;
@@ -50,7 +54,7 @@ export interface GpuReport {
     }>;
     error?: string;
   };
-  environment: Record<string, string>;
+  environment: Record<string, string | null>;
   benchmark: {
     ran: boolean;
     matrix_size?: number;

@@ -75,13 +75,13 @@ const isRunning = computed(() => app.model.outputs.isRunning);
         </table>
       </section>
 
-      <section v-if="Object.keys(gpuInfo.environment).length > 0" class="info-section">
+      <section class="info-section">
         <h3>Environment Variables</h3>
         <table class="info-table">
           <tbody>
             <tr v-for="(val, key) in gpuInfo.environment" :key="key">
               <td class="env-key">{{ key }}</td>
-              <td>{{ val }}</td>
+              <td :class="{ 'not-set': val === null }">{{ val ?? '(not set)' }}</td>
             </tr>
           </tbody>
         </table>
@@ -114,7 +114,30 @@ const isRunning = computed(() => app.model.outputs.isRunning);
 
       <section v-if="!gpuInfo.nvidia_smi.available" class="info-section">
         <h3>nvidia-smi</h3>
-        <p>Not available{{ gpuInfo.nvidia_smi.error ? ': ' + gpuInfo.nvidia_smi.error : '' }}</p>
+        <table class="info-table">
+          <tbody>
+            <tr>
+              <td class="env-key">Command</td>
+              <td><code>{{ gpuInfo.nvidia_smi.command ?? 'N/A' }}</code></td>
+            </tr>
+            <tr>
+              <td class="env-key">Exit code</td>
+              <td>{{ gpuInfo.nvidia_smi.returncode ?? 'N/A' }}</td>
+            </tr>
+            <tr v-if="gpuInfo.nvidia_smi.error">
+              <td class="env-key">Error</td>
+              <td>{{ gpuInfo.nvidia_smi.error }}</td>
+            </tr>
+            <tr v-if="gpuInfo.nvidia_smi.stdout">
+              <td class="env-key">Stdout</td>
+              <td><pre class="log-pre">{{ gpuInfo.nvidia_smi.stdout }}</pre></td>
+            </tr>
+            <tr v-if="gpuInfo.nvidia_smi.stderr">
+              <td class="env-key">Stderr</td>
+              <td><pre class="log-pre">{{ gpuInfo.nvidia_smi.stderr }}</pre></td>
+            </tr>
+          </tbody>
+        </table>
       </section>
     </div>
 
@@ -176,6 +199,18 @@ const isRunning = computed(() => app.model.outputs.isRunning);
 .env-key {
   font-family: monospace;
   font-weight: 600;
+}
+
+.not-set {
+  color: #999;
+  font-style: italic;
+}
+
+.log-pre {
+  margin: 0;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .status-message {
