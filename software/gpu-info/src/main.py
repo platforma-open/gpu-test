@@ -143,12 +143,15 @@ def detect_env_vars():
     return env
 
 
-def run_benchmark(device_count):
+def run_benchmark(torch_cuda_available, nvidia_smi_available):
     """Run a simple matrix multiply benchmark on GPU vs CPU."""
     results = {"ran": False}
 
-    if device_count == 0:
-        results["skipped"] = "no GPU available"
+    if not torch_cuda_available:
+        if nvidia_smi_available:
+            results["skipped"] = "GPU detected by nvidia-smi but PyTorch CUDA is not available (missing CUDA toolkit or driver mismatch)"
+        else:
+            results["skipped"] = "no GPU available"
         return results
 
     try:
@@ -280,8 +283,10 @@ def main():
     report["nvidia_smi"] = detect_nvidia_smi()
     report["environment"] = detect_env_vars()
 
-    device_count = report["torch_cuda"].get("device_count", 0)
-    report["benchmark"] = run_benchmark(device_count)
+    report["benchmark"] = run_benchmark(
+        report["torch_cuda"]["available"],
+        report["nvidia_smi"]["available"],
+    )
 
     report["gpu_available"] = (
         report["torch_cuda"]["available"] or report["nvidia_smi"]["available"]
