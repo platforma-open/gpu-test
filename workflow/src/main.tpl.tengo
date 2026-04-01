@@ -9,6 +9,7 @@ wf.body(func(args) {
 		software(gpuInfoSw).
 		cpu(1).
 		mem("2GiB").
+		gpu(1).
 		saveFileContent("gpu-info.json").
 		saveStdoutStream().
 		run()
