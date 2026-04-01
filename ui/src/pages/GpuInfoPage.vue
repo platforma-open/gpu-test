@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PlBlockPage, PlLogView } from '@platforma-sdk/ui-vue';
+import { PlBlockPage, PlBtnGhost, PlLogView } from '@platforma-sdk/ui-vue';
 import { computed } from 'vue';
 import { useApp } from '../app';
 
@@ -8,11 +8,19 @@ const app = useApp();
 const gpuInfo = computed(() => app.model.outputs.gpuInfo);
 const gpuLog = computed(() => app.model.outputs.gpuLog);
 const isRunning = computed(() => app.model.outputs.isRunning);
+
+function rerun() {
+  app.model.args.runId = (app.model.args.runId ?? 0) + 1;
+}
 </script>
 
 <template>
   <PlBlockPage>
     <template #title>GPU Detection Report</template>
+
+    <div class="actions">
+      <PlBtnGhost @click="rerun" :disabled="isRunning">Re-run detection</PlBtnGhost>
+    </div>
 
     <div v-if="isRunning" class="status-message">
       Running GPU detection...
@@ -252,6 +260,10 @@ const isRunning = computed(() => app.model.outputs.isRunning);
   font-size: 12px;
   white-space: pre-wrap;
   word-break: break-all;
+}
+
+.actions {
+  margin-bottom: 16px;
 }
 
 .status-message {
