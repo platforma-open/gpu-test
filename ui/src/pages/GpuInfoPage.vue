@@ -8,6 +8,7 @@ const app = useApp();
 const gpuInfo = computed(() => app.model.outputs.gpuInfo);
 const gpuLog = computed(() => app.model.outputs.gpuLog);
 const isRunning = computed(() => app.model.outputs.isRunning);
+const hasRun = computed(() => gpuInfo.value !== undefined || gpuLog.value !== undefined);
 
 function rerun() {
   app.model.args.runId = (app.model.args.runId ?? 0) + 1;
@@ -18,11 +19,15 @@ function rerun() {
   <PlBlockPage>
     <template #title>GPU Detection Report</template>
 
-    <div class="actions">
+    <div v-if="hasRun" class="actions">
       <PlBtnGhost @click="rerun" :disabled="isRunning">Re-run detection</PlBtnGhost>
     </div>
 
-    <div v-if="isRunning" class="status-message">
+    <div v-if="!hasRun && !isRunning" class="status-message">
+      Press <b>Run</b> button to start GPU detection
+    </div>
+
+    <div v-else-if="isRunning" class="status-message">
       Running GPU detection...
     </div>
 
