@@ -1,13 +1,14 @@
 import { BlockModel } from '@platforma-sdk/model';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type -- GPU config will be added in Step 8
-export type BlockArgs = {};
+export type BlockArgs = {
+  runId: number;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- UI state will be added in Step 8
 export type UiState = {};
 
 export const model = BlockModel.create()
-  .withArgs<BlockArgs>({})
+  .withArgs<BlockArgs>({ runId: 0 })
   .withUiState<UiState>({})
   .argsValid(() => true)
 
