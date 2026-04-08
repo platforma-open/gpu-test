@@ -38,22 +38,6 @@ export interface GpuReport {
     }>;
     error?: string;
   };
-  torch_cuda: {
-    available: boolean;
-    device_count: number;
-    cuda_version: string | null;
-    cudnn_version: string | null;
-    devices: Array<{
-      index: number;
-      name: string;
-      total_memory_mb: number;
-      free_memory_mb?: number;
-      major: number;
-      minor: number;
-      multi_processor_count: number;
-    }>;
-    error?: string;
-  };
   nvidia_smi: {
     available: boolean;
     driver_version: string | null;
@@ -80,8 +64,6 @@ export interface GpuReport {
     gpu_time_ms?: number;
     speedup?: number;
     skipped?: string;
-    cupy_error?: string;
-    torch_error?: string;
     error?: string;
   };
 }
