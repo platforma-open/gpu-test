@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 1.0.2
+
+### Patch Changes
+
+- f48f6d7: Add --seed arg for dedup busting, random initial seed, show seed in UI
+
 ## 1.0.1
 
 ### Patch Changes

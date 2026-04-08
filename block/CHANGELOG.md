@@ -1,5 +1,15 @@
 # @platforma-open/milaboratories.gpu-test
 
+## 0.2.2
+
+### Patch Changes
+
+- f48f6d7: Add --seed arg for dedup busting, random initial seed, show seed in UI
+- Updated dependencies [f48f6d7]
+  - @platforma-open/milaboratories.gpu-test.model@0.2.2
+  - @platforma-open/milaboratories.gpu-test.workflow@0.2.2
+  - @platforma-open/milaboratories.gpu-test.ui@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes
