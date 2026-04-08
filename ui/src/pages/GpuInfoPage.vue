@@ -7,11 +7,12 @@ const app = useApp();
 
 const gpuInfo = computed(() => app.model.outputs.gpuInfo);
 const gpuLog = computed(() => app.model.outputs.gpuLog);
+const seed = computed(() => app.model.outputs.seed);
 const isRunning = computed(() => app.model.outputs.isRunning);
 const hasRun = computed(() => gpuInfo.value !== undefined || gpuLog.value !== undefined);
 
 function rerun() {
-  app.model.args.runId = Math.floor(Math.random() * 2147483647);
+  app.model.args.seed = Math.floor(Math.random() * 2147483647);
 }
 </script>
 
@@ -20,7 +21,7 @@ function rerun() {
     <template #title>GPU Detection Report</template>
 
     <div v-if="hasRun" class="actions">
-      <PlBtnGhost @click="rerun" :disabled="isRunning">Re-run GPU detection</PlBtnGhost>
+      <PlBtnGhost :disabled="isRunning" @click="rerun">Re-run GPU detection</PlBtnGhost>
     </div>
 
     <div v-if="!hasRun && !isRunning" class="status-message">
@@ -34,7 +35,7 @@ function rerun() {
     <div v-else-if="gpuInfo">
       <div class="summary-banner" :class="gpuInfo.gpu_available ? 'gpu-available' : 'gpu-unavailable'">
         {{ gpuInfo.gpu_available ? 'GPU AVAILABLE' : 'GPU NOT AVAILABLE' }}
-        <span class="seed-label">seed: {{ gpuInfo.seed }}</span>
+        <span class="seed-label">seed: {{ seed }}</span>
       </div>
 
       <section v-if="gpuInfo.cupy.available" class="info-section">

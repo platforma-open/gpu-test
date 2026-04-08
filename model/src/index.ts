@@ -1,20 +1,21 @@
 import { BlockModel } from '@platforma-sdk/model';
 
 export type BlockArgs = {
-  runId: number;
+  seed: number;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- UI state will be added in Step 8
 export type UiState = {};
 
 export const model = BlockModel.create()
-  .withArgs<BlockArgs>({ runId: Math.floor(Math.random() * 2147483647) })
+  .withArgs<BlockArgs>({ seed: Math.floor(Math.random() * 2147483647) })
   .withUiState<UiState>({})
   .argsValid(() => true)
 
   .output('gpuLog', (ctx) => ctx.outputs?.resolve('gpuLog')?.getLogHandle())
   .output('gpuInfo', (ctx) => ctx.outputs?.resolve('gpuInfo')?.getDataAsJson<GpuReport>())
   .output('isRunning', (ctx) => ctx.outputs?.getIsReadyOrError() === false)
+  .output('seed', (ctx) => ctx.outputs?.resolve('seed')?.getDataAsString())
 
   .title(() => 'GPU Test')
   .sections(() => [{ type: 'link' as const, href: '/' as const, label: 'GPU Info' }])

@@ -6,4 +6,4 @@
 '@platforma-open/milaboratories.gpu-test': patch
 ---
 
-Add --seed arg for dedup busting, random initial runId, show seed in UI
+Add --seed arg for dedup busting, random initial seed, show seed in UI
