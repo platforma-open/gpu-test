@@ -21,6 +21,7 @@ export const model = BlockModel.create()
   .done(1);
 
 export interface GpuReport {
+  seed: number;
   gpu_available: boolean;
   cupy: {
     available: boolean;

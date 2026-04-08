@@ -395,7 +395,13 @@ def format_report(report):
 
 
 def main():
-    report = {}
+    import argparse
+
+    parser = argparse.ArgumentParser(description="GPU detection and benchmark")
+    parser.add_argument("--seed", type=int, default=0, help="Run seed for cache busting")
+    args = parser.parse_args()
+
+    report = {"seed": args.seed}
 
     report["cupy"] = detect_cupy()
     report["torch_cuda"] = detect_torch_cuda()

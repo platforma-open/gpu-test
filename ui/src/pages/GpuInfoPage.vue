@@ -11,7 +11,7 @@ const isRunning = computed(() => app.model.outputs.isRunning);
 const hasRun = computed(() => gpuInfo.value !== undefined || gpuLog.value !== undefined);
 
 function rerun() {
-  app.model.args.runId = (app.model.args.runId ?? 0) + 1;
+  app.model.args.runId = Math.floor(Math.random() * 2147483647);
 }
 </script>
 
@@ -34,6 +34,7 @@ function rerun() {
     <div v-else-if="gpuInfo">
       <div class="summary-banner" :class="gpuInfo.gpu_available ? 'gpu-available' : 'gpu-unavailable'">
         {{ gpuInfo.gpu_available ? 'GPU AVAILABLE' : 'GPU NOT AVAILABLE' }}
+        <span class="seed-label">seed: {{ gpuInfo.seed }}</span>
       </div>
 
       <section v-if="gpuInfo.cupy.available" class="info-section">
@@ -215,6 +216,13 @@ function rerun() {
 .gpu-available {
   background: #d4edda;
   color: #155724;
+}
+
+.seed-label {
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 16px;
+  opacity: 0.7;
 }
 
 .gpu-unavailable {
