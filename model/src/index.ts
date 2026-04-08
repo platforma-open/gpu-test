@@ -8,7 +8,7 @@ export type BlockArgs = {
 export type UiState = {};
 
 export const model = BlockModel.create()
-  .withArgs<BlockArgs>({ runId: 0 })
+  .withArgs<BlockArgs>({ runId: Math.floor(Math.random() * 2147483647) })
   .withUiState<UiState>({})
   .argsValid(() => true)
 
