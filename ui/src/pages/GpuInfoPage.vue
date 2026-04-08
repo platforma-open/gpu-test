@@ -20,7 +20,7 @@ function rerun() {
     <template #title>GPU Detection Report</template>
 
     <div v-if="hasRun" class="actions">
-      <PlBtnGhost @click="rerun" :disabled="isRunning">Re-run detection</PlBtnGhost>
+      <PlBtnGhost @click="rerun" :disabled="isRunning">Re-run GPU detection</PlBtnGhost>
     </div>
 
     <div v-if="!hasRun && !isRunning" class="status-message">
