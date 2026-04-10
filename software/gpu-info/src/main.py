@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-GPU detection and info reporting for Platforma GPU Test block.
+GPU detection and info reporting for Platforma GPU Detection block.
 
 Detects GPU availability using CuPy and nvidia-smi subprocess,
 outputs a JSON report + human-readable stdout summary.

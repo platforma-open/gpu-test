@@ -23,7 +23,7 @@
       "ui": "@platforma-open/milaboratories.gpu-test.ui/dist"
     },
     "meta": {
-      "title": "GPU Test",
+      "title": "GPU Detection",
       "url": "https://github.com/platforma-open/gpu-test",
       "support": "mailto:support@milaboratories.com",
       "description": "Detects GPU availability and reports hardware info, driver versions, and benchmark results.",

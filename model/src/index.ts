@@ -17,7 +17,7 @@ export const model = BlockModel.create()
   .output('isRunning', (ctx) => ctx.outputs?.getIsReadyOrError() === false)
   .output('seed', (ctx) => ctx.outputs?.resolve('seed')?.getDataAsString())
 
-  .title(() => 'GPU Test')
+  .title(() => 'GPU Detection')
   .sections(() => [{ type: 'link' as const, href: '/' as const, label: 'GPU Info' }])
   .done(1);
 
