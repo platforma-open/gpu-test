@@ -1,5 +1,12 @@
 # @platforma-open/milaboratories.gpu-test.workflow
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [87d01a6]
+  - @platforma-open/milaboratories.gpu-test.gpu-info@2.0.0
+
 ## 0.2.2
 
 ### Patch Changes

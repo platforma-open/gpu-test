@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.ui
 
+## 0.3.0
+
+### Minor Changes
+
+- 87d01a6: Block renamed to `GPU Detection`, requirements cleaned up
+
 ## 0.2.2
 
 ### Patch Changes
