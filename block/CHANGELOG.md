@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.gpu-test
 
+## 0.3.0
+
+### Minor Changes
+
+- ddb20d5: Add .gpu(1) to request GPU resources, update SDK to 5.13.1
+
+### Patch Changes
+
+- Updated dependencies [ddb20d5]
+  - @platforma-open/milaboratories.gpu-test.workflow@0.3.0
+
 ## 0.2.3
 
 ### Patch Changes
