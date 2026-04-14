@@ -19,7 +19,7 @@ export const model = BlockModel.create()
 
   .title(() => 'GPU Detection')
   .sections(() => [{ type: 'link' as const, href: '/' as const, label: 'GPU Info' }])
-  .done(1);
+  .done(2);
 
 export interface GpuReport {
   seed: number;
