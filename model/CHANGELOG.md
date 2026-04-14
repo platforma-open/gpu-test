@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.model
 
+## 0.2.3
+
+### Patch Changes
+
+- 69f58a3: Update block model API version to 2 for MCP set_block_data compatibility
+
 ## 0.2.2
 
 ### Patch Changes
