@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 2.1.2
+
+### Patch Changes
+
+- 87689f0: Fix CuPy: discover CUDA library paths on GPU nodes before import
+
 ## 2.1.1
 
 ### Patch Changes
