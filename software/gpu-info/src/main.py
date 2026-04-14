@@ -15,6 +15,34 @@ import sys
 import time
 
 
+def try_install_cupy():
+    """Try to install CuPy if nvidia-smi is available (indicates CUDA-capable GPU).
+    Runs pip as subprocess; no-op if cupy is already importable or no GPU found."""
+    try:
+        import cupy  # noqa: F401
+        return  # already installed
+    except ImportError:
+        pass
+
+    # Only attempt install if nvidia-smi exists (CUDA drivers present)
+    try:
+        result = subprocess.run(["nvidia-smi"], capture_output=True, timeout=5)
+        if result.returncode != 0:
+            return
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return
+
+    print("CuPy not found but GPU detected — installing cupy-cuda12x...")
+    try:
+        subprocess.run(
+            [sys.executable, "-m", "pip", "install", "--quiet", "cupy-cuda12x>=13.0.0", "numpy>=2.0.0"],
+            timeout=300,
+            check=False,
+        )
+    except Exception as e:
+        print(f"Failed to install CuPy: {e}")
+
+
 def detect_cupy():
     """Detect GPU via CuPy."""
     info = {
@@ -292,6 +320,8 @@ def main():
     args = parser.parse_args()
 
     report = {"seed": args.seed}
+
+    try_install_cupy()
 
     report["cupy"] = detect_cupy()
     report["nvidia_smi"] = detect_nvidia_smi()
