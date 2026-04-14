@@ -15,9 +15,45 @@ import sys
 import time
 
 
+def _find_cuda_lib_paths():
+    """Find CUDA library paths on the system (EKS mounts them via device plugin)."""
+    candidates = [
+        "/usr/local/nvidia/lib64",
+        "/usr/local/cuda/lib64",
+        "/usr/lib/x86_64-linux-gnu",
+    ]
+    found = []
+    for path in candidates:
+        if os.path.isdir(path):
+            found.append(path)
+    # Also search for libcuda.so anywhere under /usr
+    try:
+        result = subprocess.run(
+            ["find", "/usr", "-name", "libcuda.so*", "-type", "f"],
+            capture_output=True, text=True, timeout=5,
+        )
+        for line in result.stdout.strip().split("\n"):
+            if line:
+                found.append(os.path.dirname(line))
+    except Exception:
+        pass
+    return list(set(found))
+
+
 def try_install_cupy():
     """Try to install CuPy if nvidia-smi is available (indicates CUDA-capable GPU).
-    Runs pip as subprocess; no-op if cupy is already importable or no GPU found."""
+    Discovers CUDA library paths and sets LD_LIBRARY_PATH before import.
+    No-op if cupy is already importable or no GPU found."""
+    # Discover and set CUDA library paths before any CUDA import
+    cuda_paths = _find_cuda_lib_paths()
+    if cuda_paths:
+        existing = os.environ.get("LD_LIBRARY_PATH", "")
+        new_paths = ":".join(cuda_paths)
+        if existing:
+            new_paths = new_paths + ":" + existing
+        os.environ["LD_LIBRARY_PATH"] = new_paths
+        print(f"CUDA library paths found: {cuda_paths}")
+
     try:
         import cupy  # noqa: F401
         return  # already installed
@@ -35,10 +71,17 @@ def try_install_cupy():
     print("CuPy not found but GPU detected — installing cupy-cuda12x...")
     try:
         subprocess.run(
-            [sys.executable, "-m", "pip", "install", "--quiet", "cupy-cuda12x>=13.0.0", "numpy>=2.0.0"],
+            [sys.executable, "-m", "pip", "install", "--quiet",
+             "cupy-cuda12x>=13.0.0", "numpy>=2.0.0"],
             timeout=300,
             check=False,
         )
+        # Verify import works after install
+        try:
+            import cupy  # noqa: F811,F401
+            print("CuPy installed and importable")
+        except Exception as e:
+            print(f"CuPy installed but import failed: {e}")
     except Exception as e:
         print(f"Failed to install CuPy: {e}")
 
