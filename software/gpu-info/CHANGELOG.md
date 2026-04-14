@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 2.1.1
+
+### Patch Changes
+
+- 2c73d51: Auto-install cupy at runtime when GPU is detected via nvidia-smi
+
 ## 2.1.0
 
 ### Minor Changes
