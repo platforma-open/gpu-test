@@ -69,13 +69,19 @@ def try_install_cupy():
         return
 
     print("CuPy not found but GPU detected — installing cupy-cuda12x...")
+    # Install to a known location and add it to sys.path.
+    # HOME=/tmp in K8s jobs, so pip --user installs to /tmp/.local which
+    # isn't on Python's default path.
+    install_target = "/tmp/pip-packages"
     try:
         subprocess.run(
             [sys.executable, "-m", "pip", "install", "--quiet",
+             "--target", install_target,
              "cupy-cuda12x>=13.0.0", "numpy>=2.0.0"],
             timeout=300,
             check=False,
         )
+        sys.path.insert(0, install_target)
         # Verify import works after install
         try:
             import cupy  # noqa: F811,F401
