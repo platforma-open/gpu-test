@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 2.1.3
+
+### Patch Changes
+
+- 777caf1: Fix CuPy: pip install to --target dir, add /usr/lib64 to CUDA search paths
+
 ## 2.1.2
 
 ### Patch Changes

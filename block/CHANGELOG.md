@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test
 
+## 0.3.4
+
+### Patch Changes
+
+- @platforma-open/milaboratories.gpu-test.workflow@0.3.3
+
 ## 0.3.3
 
 ### Patch Changes
