@@ -221,7 +221,8 @@ def detect_env_vars():
 
 
 def run_benchmark(cupy_available, nvidia_smi_available):
-    """Run a simple matrix multiply benchmark on GPU vs CPU using CuPy."""
+    """Run a simple element-wise benchmark on GPU vs CPU using CuPy.
+    Uses multiply + sum instead of dot product to avoid cuBLAS dependency."""
     results = {"ran": False}
 
     if not cupy_available:
@@ -231,7 +232,7 @@ def run_benchmark(cupy_available, nvidia_smi_available):
             results["skipped"] = "no GPU available"
         return results
 
-    size = 8000
+    size = 10000
     warmup_iters = 2
     bench_iters = 5
 
@@ -242,26 +243,26 @@ def run_benchmark(cupy_available, nvidia_smi_available):
         a_cpu = np.random.randn(size, size).astype(np.float32)
         b_cpu = np.random.randn(size, size).astype(np.float32)
 
-        # CPU benchmark (numpy)
+        # CPU benchmark (numpy): element-wise multiply + sum
         for _ in range(warmup_iters):
-            np.dot(a_cpu, b_cpu)
+            (a_cpu * b_cpu).sum()
         start = time.perf_counter()
         for _ in range(bench_iters):
-            np.dot(a_cpu, b_cpu)
+            (a_cpu * b_cpu).sum()
         cpu_time = (time.perf_counter() - start) / bench_iters
 
-        # GPU benchmark (cupy)
+        # GPU benchmark (cupy): element-wise multiply + sum
         a_gpu = cp.asarray(a_cpu)
         b_gpu = cp.asarray(b_cpu)
         cp.cuda.Stream.null.synchronize()
 
         for _ in range(warmup_iters):
-            cp.dot(a_gpu, b_gpu)
+            (a_gpu * b_gpu).sum()
             cp.cuda.Stream.null.synchronize()
 
         start = time.perf_counter()
         for _ in range(bench_iters):
-            cp.dot(a_gpu, b_gpu)
+            (a_gpu * b_gpu).sum()
             cp.cuda.Stream.null.synchronize()
         gpu_time = (time.perf_counter() - start) / bench_iters
 
