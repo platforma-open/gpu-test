@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 2.2.0
+
+### Minor Changes
+
+- afe8d2e: Switch to RAPIDS runtime for full CUDA/CuPy support in Docker images
+
 ## 2.1.4
 
 ### Patch Changes
