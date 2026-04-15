@@ -44,6 +44,15 @@ def try_install_cupy():
     """Try to install CuPy if nvidia-smi is available (indicates CUDA-capable GPU).
     Discovers CUDA library paths and sets LD_LIBRARY_PATH before import.
     No-op if cupy is already importable or no GPU found."""
+    # Override NVIDIA_VISIBLE_DEVICES if set to 'void' by the Docker image.
+    # The NVIDIA container runtime should set this, but on EKS the static
+    # device plugin doesn't integrate with the runtime properly.
+    nvidia_vis = os.environ.get("NVIDIA_VISIBLE_DEVICES", "")
+    if nvidia_vis == "void" or nvidia_vis == "":
+        os.environ["NVIDIA_VISIBLE_DEVICES"] = "all"
+        os.environ.setdefault("NVIDIA_DRIVER_CAPABILITIES", "compute,utility")
+        print(f"Overriding NVIDIA_VISIBLE_DEVICES from '{nvidia_vis}' to 'all'")
+
     # Discover and set CUDA library paths before any CUDA import
     cuda_paths = _find_cuda_lib_paths()
     if cuda_paths:
