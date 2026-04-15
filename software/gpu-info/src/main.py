@@ -19,8 +19,11 @@ def _find_cuda_lib_paths():
     """Find CUDA library paths on the system (EKS mounts them via device plugin)."""
     candidates = [
         "/usr/local/nvidia/lib64",
+        "/usr/local/nvidia/lib",
         "/usr/local/cuda/lib64",
+        "/usr/local/cuda/lib",
         "/usr/lib/x86_64-linux-gnu",
+        "/usr/lib64",
     ]
     found = []
     for path in candidates:
