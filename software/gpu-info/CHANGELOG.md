@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 2.1.4
+
+### Patch Changes
+
+- 3531822: Fix benchmark: use element-wise ops instead of dot product to avoid cuBLAS dependency
+
 ## 2.1.3
 
 ### Patch Changes
