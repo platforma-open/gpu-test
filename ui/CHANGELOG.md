@@ -1,5 +1,22 @@
 # @platforma-open/milaboratories.gpu-test.ui
 
+## 0.4.0
+
+### Minor Changes
+
+- 7a9356c: Add configurable GPU count and settings panel
+
+  - Added `gpuCount` block argument (default: 1) to control GPU resource requests
+  - Workflow conditionally calls `.gpu(N)` only when gpuCount > 0
+  - UI redesigned with settings panel (PlSlideModal) matching platform conventions
+  - Settings panel opens by default on fresh blocks
+  - Added nvidia-cuda-nvrtc-cu12 and nvidia-cublas-cu12 to requirements for CuPy JIT/BLAS support
+
+### Patch Changes
+
+- Updated dependencies [7a9356c]
+  - @platforma-open/milaboratories.gpu-test.model@0.3.0
+
 ## 0.3.1
 
 ### Patch Changes
