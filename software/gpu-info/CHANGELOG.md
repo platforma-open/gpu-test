@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 2.3.0
+
+### Minor Changes
+
+- eac41c3: Detect script with CuPy improved
+
 ## 2.2.0
 
 ### Minor Changes
