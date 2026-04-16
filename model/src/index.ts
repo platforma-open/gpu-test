@@ -2,13 +2,14 @@ import { BlockModel } from '@platforma-sdk/model';
 
 export type BlockArgs = {
   seed: number;
+  gpuCount: number;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- UI state will be added in Step 8
 export type UiState = {};
 
 export const model = BlockModel.create()
-  .withArgs<BlockArgs>({ seed: Math.floor(Math.random() * 2147483647) })
+  .withArgs<BlockArgs>({ seed: Math.floor(Math.random() * 2147483647), gpuCount: 1 })
   .withUiState<UiState>({})
   .argsValid(() => true)
 

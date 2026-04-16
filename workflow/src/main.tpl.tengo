@@ -5,11 +5,16 @@ assets := import("@platforma-sdk/workflow-tengo:assets")
 gpuInfoSw := assets.importSoftware("@platforma-open/milaboratories.gpu-test.gpu-info:main")
 
 wf.body(func(args) {
-	gpuInfo := exec.builder().
+	b := exec.builder().
 		software(gpuInfoSw).
 		cpu(1).
-		mem("2GiB").
-		gpu(1).
+		mem("2GiB")
+
+	if args.gpuCount > 0 {
+		b = b.gpu(args.gpuCount)
+	}
+
+	gpuInfo := b.
 		arg("--seed").arg(string(args.seed)).
 		saveFileContent("gpu-info.json").
 		saveStdoutStream().

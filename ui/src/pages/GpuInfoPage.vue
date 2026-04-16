@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { PlBlockPage, PlBtnGhost, PlLogView } from '@platforma-sdk/ui-vue';
-import { computed } from 'vue';
+import { PlBlockPage, PlBtnGhost, PlBtnSecondary, PlLogView, PlSlideModal, PlMaskIcon24, PlNumberField } from '@platforma-sdk/ui-vue';
+import { computed, reactive } from 'vue';
 import { useApp } from '../app';
 
 const app = useApp();
@@ -11,6 +11,10 @@ const seed = computed(() => app.model.outputs.seed);
 const isRunning = computed(() => app.model.outputs.isRunning);
 const hasRun = computed(() => gpuInfo.value !== undefined || gpuLog.value !== undefined);
 
+const data = reactive({
+  settingsOpen: !hasRun.value,
+});
+
 function rerun() {
   app.model.args.seed = Math.floor(Math.random() * 2147483647);
 }
@@ -19,10 +23,36 @@ function rerun() {
 <template>
   <PlBlockPage>
     <template #title>GPU Detection Report</template>
+    <template #append>
+      <PlBtnGhost @click.stop="() => data.settingsOpen = true">
+        Settings
+        <template #append>
+          <PlMaskIcon24 name="settings" />
+        </template>
+      </PlBtnGhost>
+    </template>
 
-    <div v-if="hasRun" class="actions">
-      <PlBtnGhost :disabled="isRunning" @click="rerun">Re-run GPU detection</PlBtnGhost>
-    </div>
+    <PlSlideModal v-model="data.settingsOpen">
+      <template #title>Settings</template>
+
+      <PlNumberField
+        v-model="app.model.args.gpuCount"
+        label="Number of GPUs to request"
+        :minValue="0"
+        :maxValue="999999"
+      />
+
+      <PlNumberField
+        v-model="app.model.args.seed"
+        label="Seed (change to re-run)"
+        :minValue="0"
+        :maxValue="2147483647"
+      />
+
+      <PlBtnSecondary :disabled="isRunning" @click="rerun">
+        Re-run GPU detection
+      </PlBtnSecondary>
+    </PlSlideModal>
 
     <div v-if="!hasRun && !isRunning" class="status-message">
       Press <b>Run</b> button to start GPU detection
@@ -244,10 +274,6 @@ function rerun() {
   font-size: 12px;
   white-space: pre-wrap;
   word-break: break-all;
-}
-
-.actions {
-  margin-bottom: 16px;
 }
 
 .status-message {
