@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-GPU detection and info reporting for Platforma GPU Detection block.
+GPU detection and info reporting for Platforma GPU Test block.
 
-Detects GPU availability using CuPy and nvidia-smi subprocess,
-outputs a JSON report + human-readable stdout summary.
+Detects GPU availability using multiple methods (PyTorch, nvidia-smi subprocess)
+and outputs a JSON report + human-readable stdout summary.
 
 Runs on any platform — gracefully reports "no GPU" when CUDA is unavailable.
 """
@@ -15,88 +15,8 @@ import sys
 import time
 
 
-def _find_cuda_lib_paths():
-    """Find CUDA library paths on the system (EKS mounts them via device plugin)."""
-    candidates = [
-        "/usr/local/nvidia/lib64",
-        "/usr/local/nvidia/lib",
-        "/usr/local/cuda/lib64",
-        "/usr/local/cuda/lib",
-        "/usr/lib/x86_64-linux-gnu",
-        "/usr/lib64",
-    ]
-    found = []
-    for path in candidates:
-        if os.path.isdir(path):
-            found.append(path)
-    # Also search for libcuda.so anywhere under /usr
-    try:
-        result = subprocess.run(
-            ["find", "/usr", "-name", "libcuda.so*", "-type", "f"],
-            capture_output=True, text=True, timeout=5,
-        )
-        for line in result.stdout.strip().split("\n"):
-            if line:
-                found.append(os.path.dirname(line))
-    except Exception:
-        pass
-    return list(set(found))
-
-
-def try_install_cupy():
-    """Try to install CuPy if nvidia-smi is available (indicates CUDA-capable GPU).
-    Discovers CUDA library paths and sets LD_LIBRARY_PATH before import.
-    No-op if cupy is already importable or no GPU found."""
-    # Discover and set CUDA library paths before any CUDA import
-    cuda_paths = _find_cuda_lib_paths()
-    if cuda_paths:
-        existing = os.environ.get("LD_LIBRARY_PATH", "")
-        new_paths = ":".join(cuda_paths)
-        if existing:
-            new_paths = new_paths + ":" + existing
-        os.environ["LD_LIBRARY_PATH"] = new_paths
-        print(f"CUDA library paths found: {cuda_paths}")
-
-    try:
-        import cupy  # noqa: F401
-        return  # already installed
-    except ImportError:
-        pass
-
-    # Only attempt install if nvidia-smi exists (CUDA drivers present)
-    try:
-        result = subprocess.run(["nvidia-smi"], capture_output=True, timeout=5)
-        if result.returncode != 0:
-            return
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        return
-
-    print("CuPy not found but GPU detected — installing cupy-cuda12x...")
-    # Install to a known location and add it to sys.path.
-    # HOME=/tmp in K8s jobs, so pip --user installs to /tmp/.local which
-    # isn't on Python's default path.
-    install_target = "/tmp/pip-packages"
-    try:
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "--quiet",
-             "--target", install_target,
-             "cupy-cuda12x>=13.0.0", "numpy>=2.0.0"],
-            timeout=300,
-            check=False,
-        )
-        sys.path.insert(0, install_target)
-        # Verify import works after install
-        try:
-            import cupy  # noqa: F811,F401
-            print("CuPy installed and importable")
-        except Exception as e:
-            print(f"CuPy installed but import failed: {e}")
-    except Exception as e:
-        print(f"Failed to install CuPy: {e}")
-
-
 def detect_cupy():
-    """Detect GPU via CuPy."""
+    """Detect GPU via CuPy (available in RAPIDS environments)."""
     info = {
         "available": False,
         "device_count": 0,
@@ -132,6 +52,52 @@ def detect_cupy():
                 info["devices"].append(device)
     except ImportError:
         info["error"] = "CuPy not installed"
+    except Exception as e:
+        info["error"] = str(e)
+
+    return info
+
+
+def detect_torch_cuda():
+    """Detect GPU via PyTorch CUDA."""
+    info = {
+        "available": False,
+        "device_count": 0,
+        "devices": [],
+        "cuda_version": None,
+        "cudnn_version": None,
+    }
+
+    try:
+        import torch
+
+        info["available"] = torch.cuda.is_available()
+        if info["available"]:
+            info["device_count"] = torch.cuda.device_count()
+            info["cuda_version"] = torch.version.cuda
+            try:
+                info["cudnn_version"] = str(torch.backends.cudnn.version())
+            except Exception:
+                pass
+
+            for i in range(info["device_count"]):
+                props = torch.cuda.get_device_properties(i)
+                device = {
+                    "index": i,
+                    "name": props.name,
+                    "total_memory_mb": props.total_mem // (1024 * 1024),
+                    "major": props.major,
+                    "minor": props.minor,
+                    "multi_processor_count": props.multi_processor_count,
+                }
+                try:
+                    free, total = torch.cuda.mem_get_info(i)
+                    device["free_memory_mb"] = free // (1024 * 1024)
+                except Exception:
+                    pass
+                info["devices"].append(device)
+    except ImportError:
+        info["error"] = "PyTorch not installed"
     except Exception as e:
         info["error"] = str(e)
 
@@ -220,61 +186,104 @@ def detect_env_vars():
     return env
 
 
-def run_benchmark(cupy_available, nvidia_smi_available):
-    """Run a simple element-wise benchmark on GPU vs CPU using CuPy.
-    Uses multiply + sum instead of dot product to avoid cuBLAS dependency."""
+def run_benchmark(cupy_available, torch_cuda_available, nvidia_smi_available):
+    """Run a simple matrix multiply benchmark on GPU vs CPU.
+    Tries CuPy first (available in RAPIDS env), then PyTorch CUDA as fallback."""
     results = {"ran": False}
 
-    if not cupy_available:
+    if not cupy_available and not torch_cuda_available:
         if nvidia_smi_available:
-            results["skipped"] = "GPU detected by nvidia-smi but CuPy is not available for benchmarking"
+            results["skipped"] = "GPU detected by nvidia-smi but neither CuPy nor PyTorch CUDA is available"
         else:
             results["skipped"] = "no GPU available"
         return results
 
-    size = 10000
+    size = 8000
     warmup_iters = 2
     bench_iters = 5
 
-    try:
-        import cupy as cp
-        import numpy as np
+    # Try CuPy benchmark (works in RAPIDS environments)
+    if cupy_available:
+        try:
+            import cupy as cp
+            import numpy as np
 
-        a_cpu = np.random.randn(size, size).astype(np.float32)
-        b_cpu = np.random.randn(size, size).astype(np.float32)
+            a_cpu = np.random.randn(size, size).astype(np.float32)
+            b_cpu = np.random.randn(size, size).astype(np.float32)
 
-        # CPU benchmark (numpy): element-wise multiply + sum
-        for _ in range(warmup_iters):
-            (a_cpu * b_cpu).sum()
-        start = time.perf_counter()
-        for _ in range(bench_iters):
-            (a_cpu * b_cpu).sum()
-        cpu_time = (time.perf_counter() - start) / bench_iters
+            # CPU benchmark (numpy) — warmup then measure
+            for _ in range(warmup_iters):
+                np.dot(a_cpu, b_cpu)
+            start = time.perf_counter()
+            for _ in range(bench_iters):
+                np.dot(a_cpu, b_cpu)
+            cpu_time = (time.perf_counter() - start) / bench_iters
 
-        # GPU benchmark (cupy): element-wise multiply + sum
-        a_gpu = cp.asarray(a_cpu)
-        b_gpu = cp.asarray(b_cpu)
-        cp.cuda.Stream.null.synchronize()
-
-        for _ in range(warmup_iters):
-            (a_gpu * b_gpu).sum()
+            # GPU benchmark (cupy) — transfer, warmup, then measure
+            a_gpu = cp.asarray(a_cpu)
+            b_gpu = cp.asarray(b_cpu)
             cp.cuda.Stream.null.synchronize()
 
-        start = time.perf_counter()
-        for _ in range(bench_iters):
-            (a_gpu * b_gpu).sum()
-            cp.cuda.Stream.null.synchronize()
-        gpu_time = (time.perf_counter() - start) / bench_iters
+            for _ in range(warmup_iters):
+                cp.dot(a_gpu, b_gpu)
+                cp.cuda.Stream.null.synchronize()
 
-        results["ran"] = True
-        results["backend"] = "cupy"
-        results["matrix_size"] = size
-        results["cpu_time_ms"] = round(cpu_time * 1000, 2)
-        results["gpu_time_ms"] = round(gpu_time * 1000, 2)
-        results["speedup"] = round(cpu_time / gpu_time, 1) if gpu_time > 0 else None
+            start = time.perf_counter()
+            for _ in range(bench_iters):
+                cp.dot(a_gpu, b_gpu)
+                cp.cuda.Stream.null.synchronize()
+            gpu_time = (time.perf_counter() - start) / bench_iters
 
-    except Exception as e:
-        results["error"] = str(e)
+            results["ran"] = True
+            results["backend"] = "cupy"
+            results["matrix_size"] = size
+            results["cpu_time_ms"] = round(cpu_time * 1000, 2)
+            results["gpu_time_ms"] = round(gpu_time * 1000, 2)
+            results["speedup"] = round(cpu_time / gpu_time, 1) if gpu_time > 0 else None
+            return results
+
+        except Exception as e:
+            results["cupy_error"] = str(e)
+
+    # Fallback: PyTorch CUDA benchmark
+    if torch_cuda_available:
+        try:
+            import torch
+
+            a_cpu = torch.randn(size, size)
+            b_cpu = torch.randn(size, size)
+
+            for _ in range(warmup_iters):
+                torch.mm(a_cpu, b_cpu)
+            start = time.perf_counter()
+            for _ in range(bench_iters):
+                torch.mm(a_cpu, b_cpu)
+            cpu_time = (time.perf_counter() - start) / bench_iters
+
+            a_gpu = a_cpu.cuda()
+            b_gpu = b_cpu.cuda()
+            torch.cuda.synchronize()
+
+            for _ in range(warmup_iters):
+                torch.mm(a_gpu, b_gpu)
+                torch.cuda.synchronize()
+
+            start = time.perf_counter()
+            for _ in range(bench_iters):
+                torch.mm(a_gpu, b_gpu)
+                torch.cuda.synchronize()
+            gpu_time = (time.perf_counter() - start) / bench_iters
+
+            results["ran"] = True
+            results["backend"] = "pytorch"
+            results["matrix_size"] = size
+            results["cpu_time_ms"] = round(cpu_time * 1000, 2)
+            results["gpu_time_ms"] = round(gpu_time * 1000, 2)
+            results["speedup"] = round(cpu_time / gpu_time, 1) if gpu_time > 0 else None
+            return results
+
+        except Exception as e:
+            results["torch_error"] = str(e)
 
     return results
 
@@ -287,9 +296,9 @@ def format_report(report):
     lines.append("=" * 60)
     lines.append("")
 
-    # CuPy
+    # CuPy (RAPIDS)
     cupy_info = report["cupy"]
-    lines.append("CuPy")
+    lines.append("CuPy (RAPIDS)")
     lines.append("-" * 40)
     lines.append(f"  Available:           {cupy_info['available']}")
     if cupy_info.get("error"):
@@ -298,6 +307,26 @@ def format_report(report):
         lines.append(f"  Device count:        {cupy_info['device_count']}")
         lines.append(f"  CUDA version:        {cupy_info.get('cuda_version', 'N/A')}")
         for dev in cupy_info["devices"]:
+            lines.append(f"  GPU {dev['index']}: {dev['name']}")
+            lines.append(f"    VRAM:              {dev['total_memory_mb']} MB")
+            if "free_memory_mb" in dev:
+                lines.append(f"    Free VRAM:         {dev['free_memory_mb']} MB")
+            lines.append(f"    Compute:           {dev['major']}.{dev['minor']}")
+            lines.append(f"    SMs:               {dev['multi_processor_count']}")
+    lines.append("")
+
+    # PyTorch CUDA
+    torch_info = report["torch_cuda"]
+    lines.append("PyTorch CUDA")
+    lines.append("-" * 40)
+    lines.append(f"  CUDA available:      {torch_info['available']}")
+    if torch_info.get("error"):
+        lines.append(f"  Error:               {torch_info['error']}")
+    if torch_info["available"]:
+        lines.append(f"  Device count:        {torch_info['device_count']}")
+        lines.append(f"  CUDA version:        {torch_info['cuda_version']}")
+        lines.append(f"  cuDNN version:       {torch_info.get('cudnn_version', 'N/A')}")
+        for dev in torch_info["devices"]:
             lines.append(f"  GPU {dev['index']}: {dev['name']}")
             lines.append(f"    VRAM:              {dev['total_memory_mb']} MB")
             if "free_memory_mb" in dev:
@@ -357,7 +386,7 @@ def format_report(report):
     lines.append("")
 
     # Summary
-    gpu_available = cupy_info["available"] or smi_info["available"]
+    gpu_available = cupy_info["available"] or torch_info["available"] or smi_info["available"]
     lines.append("=" * 60)
     lines.append(f"SUMMARY: GPU {'AVAILABLE' if gpu_available else 'NOT AVAILABLE'}")
     lines.append("=" * 60)
@@ -374,19 +403,20 @@ def main():
 
     report = {"seed": args.seed}
 
-    try_install_cupy()
-
     report["cupy"] = detect_cupy()
+    report["torch_cuda"] = detect_torch_cuda()
     report["nvidia_smi"] = detect_nvidia_smi()
     report["environment"] = detect_env_vars()
 
     report["benchmark"] = run_benchmark(
         report["cupy"]["available"],
+        report["torch_cuda"]["available"],
         report["nvidia_smi"]["available"],
     )
 
     report["gpu_available"] = (
         report["cupy"]["available"]
+        or report["torch_cuda"]["available"]
         or report["nvidia_smi"]["available"]
     )
 

@@ -1,3 +1,4 @@
-# No hard dependencies — GPU libraries are detected at runtime.
-# CuPy and numpy are available in RAPIDS/CUDA runtime environments;
-# on systems without them, the script falls back to nvidia-smi detection.
+cupy-cuda12x>=13.0.0; platform_system == "Linux" and platform_machine == "x86_64"
+nvidia-cuda-nvrtc-cu12; platform_system == "Linux" and platform_machine == "x86_64"
+nvidia-cublas-cu12; platform_system == "Linux" and platform_machine == "x86_64"
+numpy>=2.0.0; platform_system == "Linux" and platform_machine == "x86_64"
