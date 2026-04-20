@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.gpu-test.model",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Block model",
   "type": "module",
   "main": "dist/index.cjs",
