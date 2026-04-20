@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PlBlockPage, PlBtnGhost, PlBtnSecondary, PlLogView, PlSlideModal, PlMaskIcon24, PlNumberField } from '@platforma-sdk/ui-vue';
+import { PlBlockPage, PlBtnGhost, PlBtnSecondary, PlDropdown, PlLogView, PlSlideModal, PlMaskIcon24, PlNumberField } from '@platforma-sdk/ui-vue';
 import { computed, reactive } from 'vue';
 import { useApp } from '../app';
 
@@ -35,11 +35,15 @@ function rerun() {
     <PlSlideModal v-model="data.settingsOpen">
       <template #title>Settings</template>
 
-      <PlNumberField
-        v-model="app.model.args.gpuCount"
-        label="Number of GPUs to request"
-        :minValue="0"
-        :maxValue="999999"
+      <PlDropdown
+        v-model="app.model.args.gpuMemory"
+        label="GPU memory (VRAM)"
+        :options="[
+          { value: '', label: 'No GPU' },
+          { value: '1GiB', label: 'Any GPU (1 GiB minimum)' },
+          { value: '16GiB', label: 'Standard (16 GiB — T4)' },
+          { value: '24GiB', label: 'Large (24 GiB — A10G/L4)' },
+        ]"
       />
 
       <PlNumberField

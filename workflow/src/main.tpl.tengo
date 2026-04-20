@@ -10,8 +10,8 @@ wf.body(func(args) {
 		cpu(1).
 		mem("2GiB")
 
-	if args.gpuCount > 0 {
-		b = b.gpu(args.gpuCount)
+	if args.gpuMemory != "" {
+		b = b.gpu(args.gpuMemory)
 	}
 
 	gpuInfo := b.
