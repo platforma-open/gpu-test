@@ -11,7 +11,7 @@ wf.body(func(args) {
 		mem("2GiB")
 
 	if args.gpuMemory != "" {
-		b = b.gpu(args.gpuMemory)
+		b = b.gpuMemory(args.gpuMemory)
 	}
 
 	gpuInfo := b.
