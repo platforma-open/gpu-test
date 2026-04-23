@@ -41,8 +41,11 @@ function rerun() {
         :options="[
           { value: '', label: 'No GPU' },
           { value: '1GiB', label: 'Any GPU (1 GiB minimum)' },
-          { value: '16GiB', label: 'Standard (16 GiB — T4)' },
-          { value: '24GiB', label: 'Large (24 GiB — A10G/L4)' },
+          { value: '16GiB', label: '16 GiB (T4)' },
+          { value: '24GiB', label: '24 GiB (A10G/L4)' },
+          { value: '36GiB', label: '36 GiB' },
+          { value: '48GiB', label: '48 GiB (A6000/L40)' },
+          { value: '60GiB', label: '60 GiB' },
         ]"
       />
 
