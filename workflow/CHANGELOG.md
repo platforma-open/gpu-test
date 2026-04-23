@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.workflow
 
+## 0.6.0
+
+### Minor Changes
+
+- a4f96a4: .gpu() renamed to .gpuMemory()
+
 ## 0.5.0
 
 ### Minor Changes
