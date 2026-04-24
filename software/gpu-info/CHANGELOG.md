@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 3.0.0
+
+### Major Changes
+
+- 8ed4476: CPU and RAM params added
+
 ## 2.5.0
 
 ### Minor Changes

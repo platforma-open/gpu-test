@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.gpu-test.workflow",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Tengo-based template",
   "scripts": {
     "build": "shx rm -rf dist && pl-tengo check && pl-tengo build",
