@@ -8,13 +8,13 @@ wf.body(func(args) {
 	b := exec.builder().
 		software(gpuInfoSw)
 
-	if args.cpu != "" {
+	if args.cpu != undefined && args.cpu != "" {
 		b = b.cpu(int(args.cpu))
 	}
-	if args.mem != "" {
+	if args.mem != undefined && args.mem != "" {
 		b = b.mem(args.mem)
 	}
-	if args.gpuMemory != "" {
+	if args.gpuMemory != undefined && args.gpuMemory != "" {
 		b = b.gpuMemory(args.gpuMemory)
 	}
 
