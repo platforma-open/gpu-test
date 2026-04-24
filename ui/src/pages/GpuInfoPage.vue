@@ -49,6 +49,33 @@ function rerun() {
         ]"
       />
 
+      <PlDropdown
+        v-model="app.model.args.cpu"
+        label="CPU cores"
+        :options="[
+          { value: 1, label: '1' },
+          { value: 2, label: '2' },
+          { value: 4, label: '4' },
+          { value: 8, label: '8' },
+          { value: 16, label: '16' },
+          { value: 32, label: '32' },
+        ]"
+      />
+
+      <PlDropdown
+        v-model="app.model.args.mem"
+        label="RAM"
+        :options="[
+          { value: '1GiB', label: '1 GiB' },
+          { value: '2GiB', label: '2 GiB' },
+          { value: '4GiB', label: '4 GiB' },
+          { value: '8GiB', label: '8 GiB' },
+          { value: '16GiB', label: '16 GiB' },
+          { value: '32GiB', label: '32 GiB' },
+          { value: '64GiB', label: '64 GiB' },
+        ]"
+      />
+
       <PlNumberField
         v-model="app.model.args.seed"
         label="Seed (change to re-run)"
