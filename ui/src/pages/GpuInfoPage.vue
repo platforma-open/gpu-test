@@ -53,12 +53,13 @@ function rerun() {
         v-model="app.model.args.cpu"
         label="CPU cores"
         :options="[
-          { value: 1, label: '1' },
-          { value: 2, label: '2' },
-          { value: 4, label: '4' },
-          { value: 8, label: '8' },
-          { value: 16, label: '16' },
-          { value: 32, label: '32' },
+          { value: '', label: 'No CPU request' },
+          { value: '1', label: '1' },
+          { value: '2', label: '2' },
+          { value: '4', label: '4' },
+          { value: '8', label: '8' },
+          { value: '16', label: '16' },
+          { value: '32', label: '32' },
         ]"
       />
 
@@ -66,6 +67,7 @@ function rerun() {
         v-model="app.model.args.mem"
         label="RAM"
         :options="[
+          { value: '', label: 'No RAM request' },
           { value: '1GiB', label: '1 GiB' },
           { value: '2GiB', label: '2 GiB' },
           { value: '4GiB', label: '4 GiB' },

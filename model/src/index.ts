@@ -3,7 +3,7 @@ import { BlockModel } from '@platforma-sdk/model';
 export type BlockArgs = {
   seed: number;
   gpuMemory: string;
-  cpu: number;
+  cpu: string;
   mem: string;
 };
 
@@ -11,7 +11,7 @@ export type BlockArgs = {
 export type UiState = {};
 
 export const model = BlockModel.create()
-  .withArgs<BlockArgs>({ seed: Math.floor(Math.random() * 2147483647), gpuMemory: '1GiB', cpu: 1, mem: '2GiB' })
+  .withArgs<BlockArgs>({ seed: Math.floor(Math.random() * 2147483647), gpuMemory: '1GiB', cpu: '', mem: '' })
   .withUiState<UiState>({})
   .argsValid(() => true)
 

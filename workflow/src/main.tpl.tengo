@@ -6,10 +6,14 @@ gpuInfoSw := assets.importSoftware("@platforma-open/milaboratories.gpu-test.gpu-
 
 wf.body(func(args) {
 	b := exec.builder().
-		software(gpuInfoSw).
-		cpu(args.cpu).
-		mem(args.mem)
+		software(gpuInfoSw)
 
+	if args.cpu != "" {
+		b = b.cpu(int(args.cpu))
+	}
+	if args.mem != "" {
+		b = b.mem(args.mem)
+	}
 	if args.gpuMemory != "" {
 		b = b.gpuMemory(args.gpuMemory)
 	}
