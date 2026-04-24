@@ -16,8 +16,8 @@ catalogs:
       specifier: 1.2.1
       version: 1.2.1
     '@platforma-open/milaboratories.runenv-python-3':
-      specifier: ^1.7.3
-      version: 1.7.9
+      specifier: ^1.7.11
+      version: 1.7.11
     '@platforma-sdk/block-tools':
       specifier: 2.7.2
       version: 2.7.2
@@ -126,7 +126,7 @@ importers:
     devDependencies:
       '@platforma-open/milaboratories.runenv-python-3':
         specifier: 'catalog:'
-        version: 1.7.9
+        version: 1.7.11
       '@platforma-sdk/package-builder':
         specifier: 'catalog:'
         version: 3.11.4
@@ -876,17 +876,17 @@ packages:
   '@platforma-open/milaboratories.runenv-python-3.12.10-parapred@1.1.0':
     resolution: {integrity: sha512-nEM4eEj7pFT6yi+P5028qtgK5v9A9H0XdVHDtrKX7xW5Jipc1RIliOEU3gzaH0E7UAzPFQGSqShlwakRcGXwdQ==}
 
-  '@platforma-open/milaboratories.runenv-python-3.12.10-rapids@1.5.0':
-    resolution: {integrity: sha512-TA/9q+fVKjyVLLeSkhLMFqIpPn4B46SQVMBna+INYsvpKUtu0GPQrJ9WES2Q+Dxpi0FivzsiN30h8z5ZQBQ/2Q==}
+  '@platforma-open/milaboratories.runenv-python-3.12.10-rapids@1.6.0':
+    resolution: {integrity: sha512-SHCS1PevyL1mEo1G7eCzrkkulVQKPQYrOfLYvmKob2wPdxp8I68AiSzSx3pC4L0ctzuWK/yAM5GVlZqF4uZg9Q==}
 
   '@platforma-open/milaboratories.runenv-python-3.12.10-sccoda@1.3.5':
     resolution: {integrity: sha512-oNkt0u8fgZACcL3XmAu4v0tDGnTSc3qRQs07U8OFX+paQk7qH4ckt0psLGN1iHDKZ3Gw3nlgel0D6Lst02WahQ==}
 
-  '@platforma-open/milaboratories.runenv-python-3.12.10@1.3.6':
-    resolution: {integrity: sha512-Bv4IF0PtbnyKJmlW/ygcGdhJS3cSCsOFZWR9buzr+VteDITKS1xyISW6tkO3glVBgInITGrtaDPKXTeiurhOHA==}
+  '@platforma-open/milaboratories.runenv-python-3.12.10@1.3.7':
+    resolution: {integrity: sha512-Q7HvAm6KOjCN94/rLoUaqtCaKwBfJAbPgYMPKSkockX9aQVWDBzlZfzYlKfzOjnhm96VcNSbkO7S3NoygEroTQ==}
 
-  '@platforma-open/milaboratories.runenv-python-3@1.7.9':
-    resolution: {integrity: sha512-erlYStN9cZ97tvzm5C+yBq46mjeXp9T0QhuhEI03a/HA4R296o0QFMr9opim5/CS3BpdWf++QJJtqqypOYdaKw==}
+  '@platforma-open/milaboratories.runenv-python-3@1.7.11':
+    resolution: {integrity: sha512-oz9kvYRu9bfC/5S2dueFChq2owJNbIWhFdO2QYn5lckqTOiDlCCyOp6hyz0iPz2PVJMUpMZydQMCJCZHk4/pPA==}
 
   '@platforma-open/milaboratories.software-ptabler.schema@1.13.9':
     resolution: {integrity: sha512-g8yqWbNMV8CKHonyC8ZwP86uppsF9OPfZcLm+qM8abKNPxkIHb6jVY3ni9Rzd7wi58gZFdT0SUu/P4nI80JgcA==}
@@ -1550,12 +1550,28 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4 <6.1.0'
 
+  '@typescript-eslint/project-service@8.59.0':
+    resolution: {integrity: sha512-Lw5ITrR5s5TbC19YSvlr63ZfLaJoU6vtKTHyB0GQOpX0W7d5/Ir6vUahWi/8Sps/nOukZQ0IB3SmlxZnjaKVnw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      typescript: '>=4.8.4 <6.1.0'
+
   '@typescript-eslint/scope-manager@8.58.0':
     resolution: {integrity: sha512-W1Lur1oF50FxSnNdGp3Vs6P+yBRSmZiw4IIjEeYxd8UQJwhUF0gDgDD/W/Tgmh73mxgEU3qX0Bzdl/NGuSPEpQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@typescript-eslint/scope-manager@8.59.0':
+    resolution: {integrity: sha512-UzR16Ut8IpA3Mc4DbgAShlPPkVm8xXMWafXxB0BocaVRHs8ZGakAxGRskF7FId3sdk9lgGD73GSFaWmWFDE4dg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
   '@typescript-eslint/tsconfig-utils@8.58.0':
     resolution: {integrity: sha512-doNSZEVJsWEu4htiVC+PR6NpM+pa+a4ClH9INRWOWCUzMst/VA9c4gXq92F8GUD1rwhNvRLkgjfYtFXegXQF7A==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      typescript: '>=4.8.4 <6.1.0'
+
+  '@typescript-eslint/tsconfig-utils@8.59.0':
+    resolution: {integrity: sha512-91Sbl3s4Kb3SybliIY6muFBmHVv+pYXfybC4Oolp3dvk8BvIE3wOPc+403CWIT7mJNkfQRGtdqghzs2+Z91Tqg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       typescript: '>=4.8.4 <6.1.0'
@@ -1571,8 +1587,18 @@ packages:
     resolution: {integrity: sha512-O9CjxypDT89fbHxRfETNoAnHj/i6IpRK0CvbVN3qibxlLdo5p5hcLmUuCCrHMpxiWSwKyI8mCP7qRNYuOJ0Uww==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@typescript-eslint/types@8.59.0':
+    resolution: {integrity: sha512-nLzdsT1gdOgFxxxwrlNVUBzSNBEEHJ86bblmk4QAS6stfig7rcJzWKqCyxFy3YRRHXDWEkb2NralA1nOYkkm/A==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
   '@typescript-eslint/typescript-estree@8.58.0':
     resolution: {integrity: sha512-7vv5UWbHqew/dvs+D3e1RvLv1v2eeZ9txRHPnEEBUgSNLx5ghdzjHa0sgLWYVKssH+lYmV0JaWdoubo0ncGYLA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      typescript: '>=4.8.4 <6.1.0'
+
+  '@typescript-eslint/typescript-estree@8.59.0':
+    resolution: {integrity: sha512-O9Re9P1BmBLFJyikRbQpLku/QA3/AueZNO9WePLBwQrvkixTmDe8u76B6CYUAITRl/rHawggEqUGn5QIkVRLMw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       typescript: '>=4.8.4 <6.1.0'
@@ -1584,8 +1610,19 @@ packages:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '>=4.8.4 <6.1.0'
 
+  '@typescript-eslint/utils@8.59.0':
+    resolution: {integrity: sha512-I1R/K7V07XsMJ12Oaxg/O9GfrysGTmCRhvZJBv0RE0NcULMzjqVpR5kRRQjHsz3J/bElU7HwCO7zkqL+MSUz+g==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
+      typescript: '>=4.8.4 <6.1.0'
+
   '@typescript-eslint/visitor-keys@8.58.0':
     resolution: {integrity: sha512-XJ9UD9+bbDo4a4epraTwG3TsNPeiB9aShrUneAVXy8q4LuwowN+qu89/6ByLMINqvIMeI9H9hOHQtg/ijrYXzQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@typescript-eslint/visitor-keys@8.59.0':
+    resolution: {integrity: sha512-/uejZt4dSere1bx12WLlPfv8GktzcaDtuJ7s42/HEZ5zGj9oxRaD4bj7qwSunXkf+pbAhFt2zjpHYUiT5lHf0Q==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@vitejs/plugin-vue@5.2.4':
@@ -2442,8 +2479,8 @@ packages:
     resolution: {integrity: sha512-GMat4EJ5161kIy2HevLlr4luNjBgvmj413KaQA7jt4V8B4RDsfpHk7WQ9GVqfYyyx8OS/L66Kox+rJRNklLK7w==}
     engines: {node: '>=6'}
 
-  get-tsconfig@4.13.7:
-    resolution: {integrity: sha512-7tN6rFgBlMgpBML5j8typ92BKFi2sFQvIdpAqLA2beia5avZDrMs0FLZiM5etShWq5irVyGcGMEA1jcDaK7A/Q==}
+  get-tsconfig@4.14.0:
+    resolution: {integrity: sha512-yTb+8DXzDREzgvYmh6s9vHsSVCHeC0G3PI5bEXNBHtmshPnO+S5O7qgLEOn0I5QvMy6kpZN8K1NKGyilLb93wA==}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -2707,6 +2744,9 @@ packages:
 
   lodash@4.17.23:
     resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
+
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
   logform@2.7.0:
     resolution: {integrity: sha512-TFYA4jnP7PVbmlBIfhlSe+WKxs9dklXMTEGcBCIvLhE/Tn3H6Gk1norupVW7m5Cnd4bLcr08AytbyV/xj7f/kQ==}
@@ -3230,8 +3270,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  tapable@2.3.2:
-    resolution: {integrity: sha512-1MOpMXuhGzGL5TTCZFItxCc0AARf1EZFQkGqMm7ERKj8+Hgr5oLvJOVFcC+lRmR8hCe2S3jC4T5D7Vg/d7/fhA==}
+  tapable@2.3.3:
+    resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
   tar-stream@3.1.8:
@@ -3263,6 +3303,10 @@ packages:
 
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
+    engines: {node: '>=12.0.0'}
+
+  tinyglobby@0.2.16:
+    resolution: {integrity: sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==}
     engines: {node: '>=12.0.0'}
 
   tinypool@2.1.0:
@@ -4740,19 +4784,19 @@ snapshots:
 
   '@platforma-open/milaboratories.runenv-python-3.12.10-parapred@1.1.0': {}
 
-  '@platforma-open/milaboratories.runenv-python-3.12.10-rapids@1.5.0': {}
+  '@platforma-open/milaboratories.runenv-python-3.12.10-rapids@1.6.0': {}
 
   '@platforma-open/milaboratories.runenv-python-3.12.10-sccoda@1.3.5': {}
 
-  '@platforma-open/milaboratories.runenv-python-3.12.10@1.3.6': {}
+  '@platforma-open/milaboratories.runenv-python-3.12.10@1.3.7': {}
 
-  '@platforma-open/milaboratories.runenv-python-3@1.7.9':
+  '@platforma-open/milaboratories.runenv-python-3@1.7.11':
     dependencies:
-      '@platforma-open/milaboratories.runenv-python-3.12.10': 1.3.6
+      '@platforma-open/milaboratories.runenv-python-3.12.10': 1.3.7
       '@platforma-open/milaboratories.runenv-python-3.12.10-atls': 1.2.4
       '@platforma-open/milaboratories.runenv-python-3.12.10-h5ad': 1.1.4
       '@platforma-open/milaboratories.runenv-python-3.12.10-parapred': 1.1.0
-      '@platforma-open/milaboratories.runenv-python-3.12.10-rapids': 1.5.0
+      '@platforma-open/milaboratories.runenv-python-3.12.10-rapids': 1.6.0
       '@platforma-open/milaboratories.runenv-python-3.12.10-sccoda': 1.3.5
 
   '@platforma-open/milaboratories.software-ptabler.schema@1.13.9':
@@ -5432,7 +5476,7 @@ snapshots:
 
   '@stylistic/eslint-plugin@2.13.0(eslint@9.39.4)(typescript@5.6.3)':
     dependencies:
-      '@typescript-eslint/utils': 8.58.0(eslint@9.39.4)(typescript@5.6.3)
+      '@typescript-eslint/utils': 8.59.0(eslint@9.39.4)(typescript@5.6.3)
       eslint: 9.39.4
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
@@ -5562,8 +5606,17 @@ snapshots:
 
   '@typescript-eslint/project-service@8.58.0(typescript@5.6.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.58.0(typescript@5.6.3)
-      '@typescript-eslint/types': 8.58.0
+      '@typescript-eslint/tsconfig-utils': 8.59.0(typescript@5.6.3)
+      '@typescript-eslint/types': 8.59.0
+      debug: 4.4.3(supports-color@8.1.1)
+      typescript: 5.6.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/project-service@8.59.0(typescript@5.6.3)':
+    dependencies:
+      '@typescript-eslint/tsconfig-utils': 8.59.0(typescript@5.6.3)
+      '@typescript-eslint/types': 8.59.0
       debug: 4.4.3(supports-color@8.1.1)
       typescript: 5.6.3
     transitivePeerDependencies:
@@ -5574,7 +5627,16 @@ snapshots:
       '@typescript-eslint/types': 8.58.0
       '@typescript-eslint/visitor-keys': 8.58.0
 
+  '@typescript-eslint/scope-manager@8.59.0':
+    dependencies:
+      '@typescript-eslint/types': 8.59.0
+      '@typescript-eslint/visitor-keys': 8.59.0
+
   '@typescript-eslint/tsconfig-utils@8.58.0(typescript@5.6.3)':
+    dependencies:
+      typescript: 5.6.3
+
+  '@typescript-eslint/tsconfig-utils@8.59.0(typescript@5.6.3)':
     dependencies:
       typescript: 5.6.3
 
@@ -5592,6 +5654,8 @@ snapshots:
 
   '@typescript-eslint/types@8.58.0': {}
 
+  '@typescript-eslint/types@8.59.0': {}
+
   '@typescript-eslint/typescript-estree@8.58.0(typescript@5.6.3)':
     dependencies:
       '@typescript-eslint/project-service': 8.58.0(typescript@5.6.3)
@@ -5601,7 +5665,22 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       minimatch: 10.2.5
       semver: 7.7.4
-      tinyglobby: 0.2.15
+      tinyglobby: 0.2.16
+      ts-api-utils: 2.5.0(typescript@5.6.3)
+      typescript: 5.6.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/typescript-estree@8.59.0(typescript@5.6.3)':
+    dependencies:
+      '@typescript-eslint/project-service': 8.59.0(typescript@5.6.3)
+      '@typescript-eslint/tsconfig-utils': 8.59.0(typescript@5.6.3)
+      '@typescript-eslint/types': 8.59.0
+      '@typescript-eslint/visitor-keys': 8.59.0
+      debug: 4.4.3(supports-color@8.1.1)
+      minimatch: 10.2.5
+      semver: 7.7.4
+      tinyglobby: 0.2.16
       ts-api-utils: 2.5.0(typescript@5.6.3)
       typescript: 5.6.3
     transitivePeerDependencies:
@@ -5618,9 +5697,25 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@typescript-eslint/utils@8.59.0(eslint@9.39.4)(typescript@5.6.3)':
+    dependencies:
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.4)
+      '@typescript-eslint/scope-manager': 8.59.0
+      '@typescript-eslint/types': 8.59.0
+      '@typescript-eslint/typescript-estree': 8.59.0(typescript@5.6.3)
+      eslint: 9.39.4
+      typescript: 5.6.3
+    transitivePeerDependencies:
+      - supports-color
+
   '@typescript-eslint/visitor-keys@8.58.0':
     dependencies:
       '@typescript-eslint/types': 8.58.0
+      eslint-visitor-keys: 5.0.1
+
+  '@typescript-eslint/visitor-keys@8.59.0':
+    dependencies:
+      '@typescript-eslint/types': 8.59.0
       eslint-visitor-keys: 5.0.1
 
   '@vitejs/plugin-vue@5.2.4(vite@6.4.1(@types/node@25.5.0)(yaml@2.8.3))(vue@3.5.31(typescript@5.6.3))':
@@ -6200,7 +6295,7 @@ snapshots:
   enhanced-resolve@5.20.1:
     dependencies:
       graceful-fs: 4.2.11
-      tapable: 2.3.2
+      tapable: 2.3.3
 
   enquirer@2.4.1:
     dependencies:
@@ -6264,7 +6359,7 @@ snapshots:
       enhanced-resolve: 5.20.1
       eslint: 9.39.4
       eslint-plugin-es-x: 7.8.0(eslint@9.39.4)
-      get-tsconfig: 4.13.7
+      get-tsconfig: 4.14.0
       globals: 15.15.0
       globrex: 0.1.2
       ignore: 5.3.2
@@ -6503,7 +6598,7 @@ snapshots:
     dependencies:
       pump: 3.0.4
 
-  get-tsconfig@4.13.7:
+  get-tsconfig@4.14.0:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
@@ -6744,6 +6839,8 @@ snapshots:
   lodash.startcase@4.4.0: {}
 
   lodash@4.17.23: {}
+
+  lodash@4.18.1: {}
 
   logform@2.7.0:
     dependencies:
@@ -7264,7 +7361,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  tapable@2.3.2: {}
+  tapable@2.3.3: {}
 
   tar-stream@3.1.8:
     dependencies:
@@ -7307,6 +7404,11 @@ snapshots:
   tinyexec@1.0.4: {}
 
   tinyglobby@0.2.15:
+    dependencies:
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
+
+  tinyglobby@0.2.16:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
@@ -7465,7 +7567,7 @@ snapshots:
       eslint-visitor-keys: 3.4.3
       espree: 9.6.1
       esquery: 1.7.0
-      lodash: 4.17.23
+      lodash: 4.18.1
       semver: 7.7.4
     transitivePeerDependencies:
       - supports-color

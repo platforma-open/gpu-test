@@ -11,7 +11,6 @@ Runs on any platform — gracefully reports "no GPU" when CUDA is unavailable.
 import json
 import os
 import subprocess
-import sys
 import time
 
 
@@ -198,9 +197,9 @@ def run_benchmark(cupy_available, torch_cuda_available, nvidia_smi_available):
             results["skipped"] = "no GPU available"
         return results
 
-    size = 8000
-    warmup_iters = 2
-    bench_iters = 5
+    size = 40000
+    warmup_iters = 1
+    bench_iters = 50
 
     # Try CuPy benchmark (works in RAPIDS environments)
     if cupy_available:
