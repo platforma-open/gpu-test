@@ -11,7 +11,7 @@ export type BlockArgs = {
 export type UiState = {};
 
 export const model = BlockModel.create()
-  .withArgs<BlockArgs>({ seed: Math.floor(Math.random() * 2147483647), gpuMemory: '1GiB', cpu: '', mem: '' })
+  .withArgs<BlockArgs>({ seed: Math.floor(Math.random() * 2147483647), gpuMemory: '1GiB', cpu: '1', mem: '1GiB' })
   .withUiState<UiState>({})
   .argsValid(() => true)
 
