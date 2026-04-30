@@ -141,7 +141,7 @@ def detect_nvidia_smi():
                         "memory_total_mb": int(parts[2]),
                         "memory_free_mb": int(parts[3]),
                         "memory_used_mb": int(parts[4]),
-                        "temperature_c": int(parts[5]) if parts[5] != "N/A" else None,
+                        "temperature_c": int(parts[5]) if parts[5] not in ("N/A", "[N/A]") else None,
                         "driver_version": parts[6],
                     }
                     info["devices"].append(device)
@@ -291,7 +291,7 @@ def format_report(report):
     """Format the report as human-readable text."""
     lines = []
     lines.append("=" * 60)
-    lines.append("GPU Detection Report")
+    lines.append(f"GPU Detection Report (seed: {report.get('seed', 'N/A')})")
     lines.append("=" * 60)
     lines.append("")
 

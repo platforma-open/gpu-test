@@ -19,7 +19,9 @@
     "shx": "catalog:"
   },
   "packageManager": "pnpm@9.12.0",
-  "//pnpm": {
-    "overrides": {}
+  "pnpm": {
+    "overrides": {
+      "@platforma-sdk/workflow-tengo": "file:/Users/pvyazankin/mictx/core/platforma/sdk/workflow-tengo/platforma-sdk-workflow-tengo-5.13.3.tgz"
+    }
   }
 }
