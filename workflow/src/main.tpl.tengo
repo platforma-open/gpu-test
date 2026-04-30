@@ -18,8 +18,12 @@ wf.body(func(args) {
 		b = b.gpuMemory(args.gpuMemory)
 	}
 
+	b = b.arg("--seed").arg(string(args.seed))
+	if args.matrixSize != undefined && args.matrixSize != "" {
+		b = b.arg("--matrix-size").arg(string(args.matrixSize))
+	}
+
 	gpuInfo := b.
-		arg("--seed").arg(string(args.seed)).
 		saveFileContent("gpu-info.json").
 		saveStdoutStream().
 		run()

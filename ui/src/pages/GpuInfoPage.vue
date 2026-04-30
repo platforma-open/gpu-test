@@ -36,6 +36,19 @@ function rerun() {
       <template #title>Settings</template>
 
       <PlDropdown
+        v-model="app.model.args.matrixSize"
+        label="Benchmark matrix size (approx. RAM/VRAM working set)"
+        :options="[
+          { value: '1000', label: '1000×1000 (~12 MB)' },
+          { value: '2000', label: '2000×2000 (~48 MB)' },
+          { value: '4000', label: '4000×4000 (~192 MB)' },
+          { value: '8000', label: '8000×8000 (~768 MB)' },
+          { value: '16000', label: '16000×16000 (~3 GB)' },
+          { value: '32000', label: '32000×32000 (~12 GB)' },
+        ]"
+      />
+
+      <PlDropdown
         v-model="app.model.args.gpuMemory"
         label="GPU memory (VRAM)"
         :options="[

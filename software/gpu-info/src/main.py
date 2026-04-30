@@ -185,7 +185,7 @@ def detect_env_vars():
     return env
 
 
-def run_benchmark(cupy_available, torch_cuda_available, nvidia_smi_available):
+def run_benchmark(cupy_available, torch_cuda_available, nvidia_smi_available, size=4000):
     """Run a simple matrix multiply benchmark on GPU vs CPU.
     Tries CuPy first (available in RAPIDS env), then PyTorch CUDA as fallback."""
     results = {"ran": False}
@@ -197,7 +197,6 @@ def run_benchmark(cupy_available, torch_cuda_available, nvidia_smi_available):
             results["skipped"] = "no GPU available"
         return results
 
-    size = 40000
     warmup_iters = 1
     bench_iters = 50
 
@@ -398,6 +397,7 @@ def main():
 
     parser = argparse.ArgumentParser(description="GPU detection and benchmark")
     parser.add_argument("--seed", type=int, default=0, help="Run seed for cache busting")
+    parser.add_argument("--matrix-size", type=int, default=4000, help="Benchmark matrix size (NxN)")
     args = parser.parse_args()
 
     report = {"seed": args.seed}
@@ -411,6 +411,7 @@ def main():
         report["cupy"]["available"],
         report["torch_cuda"]["available"],
         report["nvidia_smi"]["available"],
+        args.matrix_size,
     )
 
     report["gpu_available"] = (
