@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test
 
+## 0.6.0
+
+### Minor Changes
+
+- d60844a: PyTorch added, matrix size selection added
+
 ## 0.5.2
 
 ### Patch Changes
