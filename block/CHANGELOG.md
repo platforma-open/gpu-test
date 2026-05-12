@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test
 
+## 0.7.0
+
+### Minor Changes
+
+- 5787785: Run limited to Linux OS only
+
 ## 0.6.0
 
 ### Minor Changes

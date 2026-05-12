@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.gpu-test",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "scripts": {
     "build": "shx rm -rf ./block-pack && block-tools pack",
     "do-pack": "shx rm -f *.tgz && block-tools pack && pnpm pack && shx mv *.tgz package.tgz"
