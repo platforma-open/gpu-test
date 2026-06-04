@@ -14,8 +14,20 @@ wf.body(func(args) {
 	if args.mem != undefined && args.mem != "" {
 		b = b.mem(args.mem)
 	}
-	if args.gpuMemory != undefined && args.gpuMemory != "" {
-		b = b.gpuMemory(args.gpuMemory)
+
+	// GPU-vs-CPU branch is decided here (tengo), not in the Python runtime.
+	// Calling .gpuMemory() against a backend without GPU is a permanent
+	// runner error, so it must be gated on exec.hasGpu. The --mode flag tells
+	// the software which path to take: 'gpu' runs the full detection +
+	// benchmark; 'cpu' emits a fast "no GPU available" report and exits
+	// successfully (gpu-test runs on non-GPU clusters too — it never errors).
+	if exec.hasGpu {
+		if args.gpuMemory != undefined && args.gpuMemory != "" {
+			b = b.gpuMemory(args.gpuMemory)
+		}
+		b = b.arg("--mode").arg("gpu")
+	} else {
+		b = b.arg("--mode").arg("cpu")
 	}
 
 	b = b.arg("--seed").arg(string(args.seed))

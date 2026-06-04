@@ -112,6 +112,7 @@ function rerun() {
     <div v-else-if="gpuInfo">
       <div class="summary-banner" :class="gpuInfo.gpu_available ? 'gpu-available' : 'gpu-unavailable'">
         {{ gpuInfo.gpu_available ? 'GPU AVAILABLE' : 'GPU NOT AVAILABLE' }}
+        <span v-if="gpuInfo.mode === 'cpu'" class="mode-label">CPU branch (exec.hasGpu = false)</span>
         <span class="seed-label">seed: {{ seed }}</span>
       </div>
 
@@ -267,6 +268,13 @@ function rerun() {
 }
 
 .seed-label {
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 16px;
+  opacity: 0.7;
+}
+
+.mode-label {
   font-size: 12px;
   font-weight: 400;
   margin-left: 16px;

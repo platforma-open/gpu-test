@@ -293,6 +293,14 @@ def format_report(report):
     lines.append(f"GPU Detection Report (seed: {report.get('seed', 'N/A')})")
     lines.append("=" * 60)
     lines.append("")
+    mode = report.get("mode", "gpu")
+    lines.append(f"Mode: {mode.upper()}")
+    if mode == "cpu":
+        lines.append(
+            "  Workflow ran on the CPU branch (exec.hasGpu = false). The block "
+            "skipped GPU probes and the benchmark."
+        )
+    lines.append("")
 
     # CuPy (RAPIDS)
     cupy_info = report["cupy"]
@@ -386,39 +394,81 @@ def format_report(report):
     # Summary
     gpu_available = cupy_info["available"] or torch_info["available"] or smi_info["available"]
     lines.append("=" * 60)
-    lines.append(f"SUMMARY: GPU {'AVAILABLE' if gpu_available else 'NOT AVAILABLE'}")
+    if mode == "cpu":
+        lines.append("SUMMARY: GPU NOT AVAILABLE (CPU branch, no probes attempted)")
+    else:
+        lines.append(f"SUMMARY: GPU {'AVAILABLE' if gpu_available else 'NOT AVAILABLE'}")
     lines.append("=" * 60)
 
     return "\n".join(lines)
+
+
+def empty_probe_result(error_msg):
+    """Empty probe result used in --mode cpu (no detection attempted)."""
+    return {
+        "available": False,
+        "device_count": 0,
+        "devices": [],
+        "cuda_version": None,
+        "error": error_msg,
+    }
 
 
 def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="GPU detection and benchmark")
+    parser.add_argument(
+        "--mode",
+        choices=["gpu", "cpu"],
+        default="gpu",
+        help=(
+            "Execution mode (set by the workflow based on exec.hasGpu): "
+            "'gpu' runs CuPy/PyTorch/nvidia-smi probes and the GPU benchmark; "
+            "'cpu' skips probes and emits a fast 'no GPU available' report. "
+            "The block never errors when no GPU is present — the CPU path is "
+            "a first-class behaviour, not a fallback."
+        ),
+    )
     parser.add_argument("--seed", type=int, default=0, help="Run seed for cache busting")
     parser.add_argument("--matrix-size", type=int, default=4000, help="Benchmark matrix size (NxN)")
     args = parser.parse_args()
 
-    report = {"seed": args.seed}
+    report = {"seed": args.seed, "mode": args.mode}
 
-    report["cupy"] = detect_cupy()
-    report["torch_cuda"] = detect_torch_cuda()
-    report["nvidia_smi"] = detect_nvidia_smi()
-    report["environment"] = detect_env_vars()
+    if args.mode == "cpu":
+        # Workflow passed --mode cpu (exec.hasGpu = false). Skip every probe
+        # and emit a minimal but schema-compatible report so the UI renders.
+        cpu_reason = "workflow ran on the CPU branch (exec.hasGpu = false)"
+        report["cupy"] = empty_probe_result(cpu_reason)
+        report["torch_cuda"] = empty_probe_result(cpu_reason)
+        report["nvidia_smi"] = {
+            "available": False,
+            "driver_version": None,
+            "devices": [],
+            "error": cpu_reason,
+        }
+        report["environment"] = detect_env_vars()
+        report["benchmark"] = {"ran": False, "skipped": cpu_reason}
+        report["gpu_available"] = False
+    else:
+        report["cupy"] = detect_cupy()
+        report["torch_cuda"] = detect_torch_cuda()
+        report["nvidia_smi"] = detect_nvidia_smi()
+        report["environment"] = detect_env_vars()
 
-    report["benchmark"] = run_benchmark(
-        report["cupy"]["available"],
-        report["torch_cuda"]["available"],
-        report["nvidia_smi"]["available"],
-        args.matrix_size,
-    )
+        report["benchmark"] = run_benchmark(
+            report["cupy"]["available"],
+            report["torch_cuda"]["available"],
+            report["nvidia_smi"]["available"],
+            args.matrix_size,
+        )
 
-    report["gpu_available"] = (
-        report["cupy"]["available"]
-        or report["torch_cuda"]["available"]
-        or report["nvidia_smi"]["available"]
-    )
+        report["gpu_available"] = (
+            report["cupy"]["available"]
+            or report["torch_cuda"]["available"]
+            or report["nvidia_smi"]["available"]
+        )
 
     # Write JSON output
     with open("gpu-info.json", "w") as f:
