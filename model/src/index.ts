@@ -27,6 +27,11 @@ export const model = BlockModel.create()
 
 export interface GpuReport {
   seed: number;
+  // 'gpu' = workflow ran on the GPU branch (exec.hasGpu was true) and the
+  // software ran the full detection + benchmark.
+  // 'cpu' = workflow ran on the CPU branch; probes were skipped and the
+  // block returned a fast "no GPU available" report without erroring.
+  mode: 'gpu' | 'cpu';
   gpu_available: boolean;
   cupy: {
     available: boolean;
