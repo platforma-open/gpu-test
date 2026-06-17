@@ -7,9 +7,9 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "pl-pkg build && node ./scripts/inject-nvidia-env.mjs",
+    "build": "pl-pkg build",
     "prepublishOnly": "pl-pkg prepublish",
-    "do-pack": "shx rm -f *.tgz && pnpm build && pnpm pack && shx mv platforma-open*.tgz package.tgz",
+    "do-pack": "shx rm -f *.tgz && pl-pkg build && pnpm pack && shx mv platforma-open*.tgz package.tgz",
     "changeset": "changeset",
     "version-packages": "changeset version"
   },
