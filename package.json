@@ -20,7 +20,7 @@
   "devDependencies": {
     "@changesets/cli": "catalog:",
     "@milaboratories/ts-builder": "catalog:",
-    "@platforma-sdk/block-tools": "catalog:",
+    "@platforma-sdk/block-tools": "file:/Users/pvyazankin/mictx5/core/platforma/tools/block-tools/package.tgz",
     "shx": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:"

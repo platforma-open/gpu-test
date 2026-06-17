@@ -17,7 +17,7 @@
     "@platforma-open/milaboratories.gpu-test.workflow": "workspace:*"
   },
   "devDependencies": {
-    "@platforma-sdk/block-tools": "catalog:",
+    "@platforma-sdk/block-tools": "file:/Users/pvyazankin/mictx5/core/platforma/tools/block-tools/package.tgz",
     "shx": "catalog:"
   },
   "packageManager": "pnpm@9.12.0",

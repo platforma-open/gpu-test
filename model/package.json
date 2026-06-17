@@ -30,7 +30,7 @@
   "devDependencies": {
     "@milaboratories/ts-builder": "catalog:",
     "@milaboratories/ts-configs": "catalog:",
-    "@platforma-sdk/block-tools": "catalog:",
+    "@platforma-sdk/block-tools": "file:/Users/pvyazankin/mictx5/core/platforma/tools/block-tools/package.tgz",
     "@platforma-sdk/eslint-config": "catalog:",
     "eslint": "catalog:",
     "vitest": "catalog:"
