@@ -1,4 +1,4 @@
-import { BlockModel } from '@platforma-sdk/model';
+import { BlockModel } from "@platforma-sdk/model";
 
 export type BlockArgs = {
   seed: number;
@@ -12,17 +12,23 @@ export type BlockArgs = {
 export type UiState = {};
 
 export const model = BlockModel.create()
-  .withArgs<BlockArgs>({ seed: Math.floor(Math.random() * 2147483647), matrixSize: '4000', gpuMemory: '1GiB', cpu: '1', mem: '1GiB' })
+  .withArgs<BlockArgs>({
+    seed: Math.floor(Math.random() * 2147483647),
+    matrixSize: "4000",
+    gpuMemory: "1GiB",
+    cpu: "1",
+    mem: "1GiB",
+  })
   .withUiState<UiState>({})
   .argsValid(() => true)
 
-  .output('gpuLog', (ctx) => ctx.outputs?.resolve('gpuLog')?.getLogHandle())
-  .output('gpuInfo', (ctx) => ctx.outputs?.resolve('gpuInfo')?.getDataAsJson<GpuReport>())
-  .output('isRunning', (ctx) => ctx.outputs?.getIsReadyOrError() === false)
-  .output('seed', (ctx) => ctx.outputs?.resolve('seed')?.getDataAsString())
+  .output("gpuLog", (ctx) => ctx.outputs?.resolve("gpuLog")?.getLogHandle())
+  .output("gpuInfo", (ctx) => ctx.outputs?.resolve("gpuInfo")?.getDataAsJson<GpuReport>())
+  .output("isRunning", (ctx) => ctx.outputs?.getIsReadyOrError() === false)
+  .output("seed", (ctx) => ctx.outputs?.resolve("seed")?.getDataAsString())
 
-  .title(() => 'GPU Detection')
-  .sections(() => [{ type: 'link' as const, href: '/' as const, label: 'GPU Info' }])
+  .title(() => "GPU Detection")
+  .sections(() => [{ type: "link" as const, href: "/" as const, label: "GPU Info" }])
   .done(2);
 
 export interface GpuReport {

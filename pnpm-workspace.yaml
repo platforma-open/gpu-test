@@ -1,9 +1,9 @@
 packages:
-  - software/gpu-info
-  - workflow
-  - model
-  - ui
   - block
+  - model
+  - software/gpu-info
+  - ui
+  - workflow
 
 catalog:
   # SDK packages - EXACT VERSIONS (no ^ or ~)
