@@ -1,20 +1,22 @@
 {
   "name": "@platforma-open/milaboratories.gpu-test.gpu-info",
   "version": "3.0.1",
-  "type": "module",
   "description": "GPU detection and info reporting",
-  "scripts": {
-    "build": "pl-pkg build",
-    "prepublishOnly": "pl-pkg prepublish",
-    "do-pack": "shx rm -f *.tgz && pl-pkg build && pnpm pack && shx mv platforma-open*.tgz package.tgz"
-  },
   "files": [
     "./dist/**/*"
   ],
+  "type": "module",
+  "scripts": {
+    "build": "pl-pkg build && node ./scripts/inject-nvidia-env.mjs",
+    "prepublishOnly": "pl-pkg prepublish",
+    "do-pack": "shx rm -f *.tgz && pnpm build && pnpm pack && shx mv platforma-open*.tgz package.tgz",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
+  },
   "dependencies": {},
   "devDependencies": {
-    "@platforma-sdk/package-builder": "catalog:",
-    "@platforma-open/milaboratories.runenv-python-3": "catalog:"
+    "@platforma-open/milaboratories.runenv-python-3": "catalog:",
+    "@platforma-sdk/package-builder": "catalog:"
   },
   "block-software": {
     "entrypoints": {

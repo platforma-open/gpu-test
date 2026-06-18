@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import { PlBlockPage, PlBtnGhost, PlBtnSecondary, PlDropdown, PlLogView, PlSlideModal, PlMaskIcon24, PlNumberField } from '@platforma-sdk/ui-vue';
-import { computed, reactive } from 'vue';
-import { useApp } from '../app';
+import {
+  PlBlockPage,
+  PlBtnGhost,
+  PlBtnSecondary,
+  PlDropdown,
+  PlLogView,
+  PlSlideModal,
+  PlMaskIcon24,
+  PlNumberField,
+} from "@platforma-sdk/ui-vue";
+import { computed, reactive } from "vue";
+import { useApp } from "../app";
 
 const app = useApp();
 
@@ -24,7 +33,7 @@ function rerun() {
   <PlBlockPage>
     <template #title>GPU Detection Report</template>
     <template #append>
-      <PlBtnGhost @click.stop="() => data.settingsOpen = true">
+      <PlBtnGhost @click.stop="() => (data.settingsOpen = true)">
         Settings
         <template #append>
           <PlMaskIcon24 name="settings" />
@@ -96,28 +105,27 @@ function rerun() {
         :maxValue="2147483647"
       />
 
-      <PlBtnSecondary :disabled="isRunning" @click="rerun">
-        Re-run GPU detection
-      </PlBtnSecondary>
+      <PlBtnSecondary :disabled="isRunning" @click="rerun"> Re-run GPU detection </PlBtnSecondary>
     </PlSlideModal>
 
     <div v-if="!hasRun && !isRunning" class="status-message">
       Press <b>Run</b> button to start GPU detection
     </div>
 
-    <div v-else-if="isRunning" class="status-message">
-      Running GPU detection...
-    </div>
+    <div v-else-if="isRunning" class="status-message">Running GPU detection...</div>
 
     <div v-else-if="gpuInfo">
-      <div class="summary-banner" :class="gpuInfo.gpu_available ? 'gpu-available' : 'gpu-unavailable'">
-        {{ gpuInfo.gpu_available ? 'GPU AVAILABLE' : 'GPU NOT AVAILABLE' }}
+      <div
+        class="summary-banner"
+        :class="gpuInfo.gpu_available ? 'gpu-available' : 'gpu-unavailable'"
+      >
+        {{ gpuInfo.gpu_available ? "GPU AVAILABLE" : "GPU NOT AVAILABLE" }}
         <span class="seed-label">seed: {{ seed }}</span>
       </div>
 
       <section v-if="gpuInfo.cupy.available" class="info-section">
         <h3>GPU Devices (CuPy)</h3>
-        <p>CUDA version: {{ gpuInfo.cupy.cuda_version ?? 'N/A' }}</p>
+        <p>CUDA version: {{ gpuInfo.cupy.cuda_version ?? "N/A" }}</p>
         <table class="info-table">
           <thead>
             <tr>
@@ -144,7 +152,7 @@ function rerun() {
 
       <section v-if="!gpuInfo.cupy.available" class="info-section">
         <h3>CuPy</h3>
-        <p>Not available{{ gpuInfo.cupy.error ? ': ' + gpuInfo.cupy.error : '' }}</p>
+        <p>Not available{{ gpuInfo.cupy.error ? ": " + gpuInfo.cupy.error : "" }}</p>
       </section>
 
       <section v-if="gpuInfo.nvidia_smi.available" class="info-section">
@@ -168,7 +176,7 @@ function rerun() {
               <td>{{ dev.memory_total_mb }} MB</td>
               <td>{{ dev.memory_free_mb }} MB</td>
               <td>{{ dev.memory_used_mb }} MB</td>
-              <td>{{ dev.temperature_c != null ? dev.temperature_c + '°C' : 'N/A' }}</td>
+              <td>{{ dev.temperature_c != null ? dev.temperature_c + "°C" : "N/A" }}</td>
             </tr>
           </tbody>
         </table>
@@ -180,14 +188,17 @@ function rerun() {
           <tbody>
             <tr v-for="(val, key) in gpuInfo.environment" :key="key">
               <td class="env-key">{{ key }}</td>
-              <td :class="{ 'not-set': val === null }">{{ val ?? '(not set)' }}</td>
+              <td :class="{ 'not-set': val === null }">{{ val ?? "(not set)" }}</td>
             </tr>
           </tbody>
         </table>
       </section>
 
       <section v-if="gpuInfo.benchmark.ran" class="info-section">
-        <h3>Benchmark ({{ gpuInfo.benchmark.matrix_size }}x{{ gpuInfo.benchmark.matrix_size }} matrix multiply, {{ gpuInfo.benchmark.backend }})</h3>
+        <h3>
+          Benchmark ({{ gpuInfo.benchmark.matrix_size }}x{{ gpuInfo.benchmark.matrix_size }} matrix
+          multiply, {{ gpuInfo.benchmark.backend }})
+        </h3>
         <table class="info-table">
           <tbody>
             <tr>
@@ -221,11 +232,13 @@ function rerun() {
           <tbody>
             <tr>
               <td class="env-key">Command</td>
-              <td><code>{{ gpuInfo.nvidia_smi.command ?? 'N/A' }}</code></td>
+              <td>
+                <code>{{ gpuInfo.nvidia_smi.command ?? "N/A" }}</code>
+              </td>
             </tr>
             <tr>
               <td class="env-key">Exit code</td>
-              <td>{{ gpuInfo.nvidia_smi.returncode ?? 'N/A' }}</td>
+              <td>{{ gpuInfo.nvidia_smi.returncode ?? "N/A" }}</td>
             </tr>
             <tr v-if="gpuInfo.nvidia_smi.error">
               <td class="env-key">Error</td>
@@ -233,11 +246,15 @@ function rerun() {
             </tr>
             <tr v-if="gpuInfo.nvidia_smi.stdout">
               <td class="env-key">Stdout</td>
-              <td><pre class="log-pre">{{ gpuInfo.nvidia_smi.stdout }}</pre></td>
+              <td>
+                <pre class="log-pre">{{ gpuInfo.nvidia_smi.stdout }}</pre>
+              </td>
             </tr>
             <tr v-if="gpuInfo.nvidia_smi.stderr">
               <td class="env-key">Stderr</td>
-              <td><pre class="log-pre">{{ gpuInfo.nvidia_smi.stderr }}</pre></td>
+              <td>
+                <pre class="log-pre">{{ gpuInfo.nvidia_smi.stderr }}</pre>
+              </td>
             </tr>
           </tbody>
         </table>

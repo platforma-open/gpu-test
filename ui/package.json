@@ -9,12 +9,14 @@
     "type-check": "ts-builder type-check --target block-ui",
     "test": "vitest",
     "lint": "eslint .",
-    "do-pack": "shx rm -f *.tgz && pnpm pack && shx mv *.tgz package.tgz"
+    "do-pack": "shx rm -f *.tgz && pnpm pack && shx mv *.tgz package.tgz",
+    "fmt": "ts-builder format",
+    "check": "ts-builder check --target block-ui"
   },
   "dependencies": {
     "@platforma-open/milaboratories.gpu-test.model": "workspace:*",
-    "@platforma-sdk/ui-vue": "catalog:",
     "@platforma-sdk/model": "catalog:",
+    "@platforma-sdk/ui-vue": "catalog:",
     "vue": "catalog:"
   },
   "devDependencies": {
@@ -22,7 +24,9 @@
     "@milaboratories/ts-configs": "catalog:",
     "@platforma-sdk/eslint-config": "catalog:",
     "eslint": "catalog:",
-    "vitest": "catalog:",
-    "typescript": "catalog:"
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "typescript": "*"
   }
 }
