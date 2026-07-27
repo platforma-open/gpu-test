@@ -1,5 +1,14 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 3.0.2
+
+### Patch Changes
+
+- 58f0308: Upgrade SDK catalog and apply the block-tools structure upgrade. Migrate the
+  workflow exec resource request to the new `resources({ onCPU, onGPU })` API,
+  pin `vue` to `3.5.24`, drop the removed `@platforma-sdk/ui-vue/styles` import,
+  and rename the model export `model` -> `platforma`.
+
 ## 3.0.1
 
 ### Patch Changes
