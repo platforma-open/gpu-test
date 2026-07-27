@@ -29,10 +29,5 @@
     "oxfmt": "*",
     "oxlint": "*"
   },
-  "packageManager": "pnpm@9.12.0",
-  "pnpm": {
-    "overrides": {
-      "@platforma-sdk/block-tools": "file:///Users/pvyazankin/mictx5/core/platforma/tools/block-tools/package.tgz"
-    }
-  }
+  "packageManager": "pnpm@9.12.0"
 }
