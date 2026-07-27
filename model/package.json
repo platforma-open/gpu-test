@@ -1,6 +1,7 @@
 {
   "name": "@platforma-open/milaboratories.gpu-test.model",
   "version": "0.4.0",
+  "private": true,
   "description": "Block model",
   "type": "module",
   "main": "dist/index.cjs",
@@ -18,8 +19,6 @@
     "build": "ts-builder build --target block-model && block-tools build-model",
     "watch": "ts-builder build --target block-model --watch",
     "type-check": "ts-builder type-check --target block-model",
-    "test": "vitest",
-    "lint": "eslint .",
     "do-pack": "shx rm -f *.tgz && pnpm pack && shx mv *.tgz package.tgz",
     "fmt": "ts-builder format",
     "check": "ts-builder check --target block-model"
@@ -30,10 +29,8 @@
   "devDependencies": {
     "@milaboratories/ts-builder": "catalog:",
     "@milaboratories/ts-configs": "catalog:",
-    "@platforma-sdk/block-tools": "file:/Users/pvyazankin/mictx5/core/platforma/tools/block-tools/package.tgz",
-    "@platforma-sdk/eslint-config": "catalog:",
-    "eslint": "catalog:",
-    "vitest": "catalog:"
+    "@platforma-sdk/block-tools": "catalog:",
+    "eslint": "catalog:"
   },
   "peerDependencies": {
     "@types/node": "*",
