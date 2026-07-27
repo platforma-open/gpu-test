@@ -1,8 +1,8 @@
-import { model } from "@platforma-open/milaboratories.gpu-test.model";
+import { platforma } from "@platforma-open/milaboratories.gpu-test.model";
 import { defineApp } from "@platforma-sdk/ui-vue";
 import GpuInfoPage from "./pages/GpuInfoPage.vue";
 
-export const sdkPlugin = defineApp(model, () => {
+export const sdkPlugin = defineApp(platforma, () => {
   return {
     routes: {
       "/": () => GpuInfoPage,

@@ -15,12 +15,12 @@
     "check": "turbo run check",
     "test:dry-run": "env PL_PKG_DEV=local turbo run test --dry-run=json",
     "mark-stable": "turbo run mark-stable",
-    "update": "block-tools structure refresh --update-deps-only && pnpm i && block-tools structure refresh && pnpm fmt"
+    "upgrade-sdk": "block-tools structure refresh --update-deps-only && pnpm i && block-tools structure refresh && pnpm i && pnpm fmt"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",
     "@milaboratories/ts-builder": "catalog:",
-    "@platforma-sdk/block-tools": "file:/Users/pvyazankin/mictx5/core/platforma/tools/block-tools/package.tgz",
+    "@platforma-sdk/block-tools": "catalog:",
     "shx": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:"

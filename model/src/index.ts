@@ -11,7 +11,7 @@ export type BlockArgs = {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- UI state will be added in Step 8
 export type UiState = {};
 
-export const model = BlockModel.create()
+export const platforma = BlockModel.create()
   .withArgs<BlockArgs>({
     seed: Math.floor(Math.random() * 2147483647),
     matrixSize: "4000",
