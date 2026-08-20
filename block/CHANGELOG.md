@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test
 
+## 0.8.0
+
+### Minor Changes
+
+- 0e41324: block-tools updated to 2.14.3
+
 ## 0.7.3
 
 ### Patch Changes
