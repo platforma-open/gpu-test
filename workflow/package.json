@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.gpu-test.workflow",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "private": true,
   "description": "Tengo-based template",
   "type": "module",
