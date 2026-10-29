@@ -34,10 +34,23 @@ wf.body(func(args) {
 		b = b.arg("--matrix-size").arg(string(args.matrixSize))
 	}
 
-	gpuInfo := b.
+	b = b.
 		saveFileContent("gpu-info.json").
-		saveStdoutStream().
-		run()
+		saveStdoutStream()
+
+	// GPU -> CPU fallback: when the backend reports that no GPU came in time (GPUMissed), the
+	// same command runs again with the CPU allocation only. The copy is taken after every output
+	// is declared, so the fallback saves and streams exactly what the GPU plan does.
+	if useGPU {
+		cpuOnly := b.copy().resources({
+			onCPU: { cpu: cpu, ram: ram }
+		})
+		b = b.fallbacks({
+			GPUMissed: [{ name: "cpuOnly", builder: cpuOnly }]
+		})
+	}
+
+	gpuInfo := b.run()
 
 	return {
 		outputs: {
