@@ -1,5 +1,6 @@
 packages:
   - block
+  - kind
   - model
   - software/gpu-info
   - ui
@@ -24,8 +25,19 @@ catalog:
   # Common dependencies - can use ^ or ~
   'vue': 3.5.24
   'typescript': ~5.6.3
-  'turbo': ^2.6.3
+  'turbo': ~2.11.10
   'vitest': ^4.0.7
   'eslint': ^9.25.1
   '@changesets/cli': ^2.29.8
   'shx': ^0.4.0
+minimumReleaseAgeExclude:
+  - "@milaboratories/*"
+  - "@platforma-sdk/*"
+  - "@platforma-open/*"
+allowBuilds:
+  "@milaboratories/tengo-tester": false
+  cpu-features: false
+  esbuild: false
+  protobufjs: false
+  ssh2: false
+  "@milaboratories/pframes-rs-node": true
