@@ -1,26 +1,29 @@
-import { BlockModel } from "@platforma-sdk/model";
+import { kind } from "@platforma-open/milaboratories.gpu-test.kind";
+import { BlockModelV3 } from "@platforma-sdk/model";
+import { blockDataModel } from "./dataModel";
+import type { BlockArgs } from "./types";
 
-export type BlockArgs = {
-  seed: number;
-  matrixSize: string;
-  gpuMemory: string;
-  cpu: string;
-  mem: string;
-};
+export type { BlockArgs, BlockData } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type -- UI state will be added in Step 8
-export type UiState = {};
+export const platforma = BlockModelV3.create({ dataModel: blockDataModel, kind })
+  // Every field is a run decision. Values are trimmed so stray whitespace
+  // typed into the form does not mark the block stale.
+  .args<BlockArgs>((data) => ({
+    seed: data.seed,
+    matrixSize: data.matrixSize.trim(),
+    gpuMemory: data.gpuMemory.trim(),
+    cpu: data.cpu.trim(),
+    mem: data.mem.trim(),
+  }))
 
-export const platforma = BlockModel.create()
-  .withArgs<BlockArgs>({
-    seed: Math.floor(Math.random() * 2147483647),
-    matrixSize: "4000",
-    gpuMemory: "1GiB",
-    cpu: "1",
-    mem: "1GiB",
-  })
-  .withUiState<UiState>({})
-  .argsValid(() => true)
+  // Inverse of `init`: the same fields, projected back out for template export.
+  // The seed stays behind — it only makes one run unique.
+  .templateParams((data) => ({
+    matrixSize: data.matrixSize,
+    gpuMemory: data.gpuMemory,
+    cpu: data.cpu,
+    mem: data.mem,
+  }))
 
   .output("gpuLog", (ctx) => ctx.outputs?.resolve("gpuLog")?.getLogHandle())
   .output("gpuInfo", (ctx) => ctx.outputs?.resolve("gpuInfo")?.getDataAsJson<GpuReport>())
@@ -29,7 +32,7 @@ export const platforma = BlockModel.create()
 
   .title(() => "GPU Detection")
   .sections(() => [{ type: "link" as const, href: "/" as const, label: "GPU Info" }])
-  .done(2);
+  .done();
 
 export interface GpuReport {
   seed: number;

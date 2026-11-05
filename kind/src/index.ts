@@ -5,38 +5,33 @@ import { name, version } from "../package.json" with { type: "json" };
  * This block's init-params contract — the shape a block of this kind receives
  * at creation, and exactly what a project template serializes for it.
  *
- * TODO(block-kind): replace `NEEDS_BLOCK_PARAMS` with the real params shape, then
- * wire the model's `init(({ params }) => …)` to consume them. If this block takes
- * no author-supplied params, set it to `Record<string, never>` deliberately.
- *
- * This is an intentional sentinel: `NEEDS_BLOCK_PARAMS` is an undefined type, so
- * the block fails to typecheck (TS2304) until the contract is chosen on purpose.
- * A scaffolded-but-unmigrated block must never compile with an empty contract by
- * default — see the block-kind migration recipe in the `block-dev` skill.
+ * The resources and the benchmark size a run asks for. The seed is left out: it
+ * only makes a run unique, so a template never carries one.
  */
-export type BlockParams = NEEDS_BLOCK_PARAMS;
+export type BlockParams = {
+  matrixSize: string;
+  gpuMemory: string;
+  cpu: string;
+  mem: string;
+};
 
 /**
  * The same contract at runtime, for params that arrive from a template file rather than
- * from typed code — the only point that can catch a hand-written entry being wrong.
- *
- * TODO(block-kind): read each key `BlockParams` declares and say what it must be, then
- * return them. Plain TypeScript is the default here: a kind owes no schema library, and a
- * check written by hand is held to the contract by the return type. Reach for a validation
- * library only where the shape earns it, and add it to this package's dependencies yourself.
- *
- * Check the fields the contract requires, and stop there. A key the contract does not name
- * needs no rejection: it is dropped by not being read.
- *
- * This is a second intentional sentinel. The function has to return `BlockParams`, so
- * `return {}` stops compiling the moment the contract declares a required field — the check
- * cannot drift from the contract by being left behind. Never satisfy it with a cast: `value
- * as BlockParams` compiles today and checks nothing forever.
+ * from typed code. Each field is a string as the settings form holds it; an empty string
+ * means the default.
  */
 function parseInitializationParams(value: unknown): BlockParams {
   assertParamsObject(value);
 
-  return {};
+  const { matrixSize, gpuMemory, cpu, mem } = value;
+  if (typeof matrixSize !== "string")
+    throw new Error("'matrixSize' is required, and must be a string.");
+  if (typeof gpuMemory !== "string")
+    throw new Error("'gpuMemory' is required, and must be a string.");
+  if (typeof cpu !== "string") throw new Error("'cpu' is required, and must be a string.");
+  if (typeof mem !== "string") throw new Error("'mem' is required, and must be a string.");
+
+  return { matrixSize, gpuMemory, cpu, mem };
 }
 
 // Identity (`name`/`version`) comes from this package's own `package.json`, so
