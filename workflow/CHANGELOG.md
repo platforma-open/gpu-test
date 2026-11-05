@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.gpu-test.workflow
 
+## 0.9.0
+
+### Patch Changes
+
+- 787c560: Structure updated to v3
+- Updated dependencies [787c560]
+  - @platforma-open/milaboratories.gpu-test.gpu-info@3.0.5
+
 ## 0.6.5
 
 ### Patch Changes

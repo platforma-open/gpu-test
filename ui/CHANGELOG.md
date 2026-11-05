@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.gpu-test.ui
 
+## 0.9.0
+
+### Minor Changes
+
+- 9d8ec81: Migrate block to BlockModelV3 with its kind. A template can preset the benchmark size and the CPU, RAM and GPU memory a run asks for; existing projects keep their settings through the legacy upgrade.
+
+### Patch Changes
+
+- Updated dependencies [9d8ec81]
+  - @platforma-open/milaboratories.gpu-test.model@0.9.0
+
 ## 0.5.1
 
 ### Patch Changes

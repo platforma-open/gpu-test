@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 3.0.5
+
+### Patch Changes
+
+- 787c560: Structure updated to v3
+
 ## 3.0.4
 
 ### Patch Changes
