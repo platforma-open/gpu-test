@@ -8,6 +8,7 @@ and outputs a JSON report + human-readable stdout summary.
 Runs on any platform — gracefully reports "no GPU" when CUDA is unavailable.
 """
 
+import hashlib
 import json
 import os
 import subprocess
@@ -294,6 +295,14 @@ def format_report(report):
     lines.append("=" * 60)
     lines.append("")
 
+    # Block identity, as run telemetry records it
+    block = report["block"]
+    lines.append("Block")
+    lines.append("-" * 40)
+    lines.append(f"  Block id:            {block['id'] or '(not set)'}")
+    lines.append(f"  Block project id:    {block['project_id'] or '(not set)'}")
+    lines.append("")
+
     # CuPy (RAPIDS)
     cupy_info = report["cupy"]
     lines.append("CuPy (RAPIDS)")
@@ -398,9 +407,16 @@ def main():
     parser = argparse.ArgumentParser(description="GPU detection and benchmark")
     parser.add_argument("--seed", type=int, default=0, help="Run seed for cache busting")
     parser.add_argument("--matrix-size", type=int, default=4000, help="Benchmark matrix size (NxN)")
+    parser.add_argument("--block-id", default="", help="Id of the block in its project")
     args = parser.parse_args()
 
     report = {"seed": args.seed}
+
+    # Run telemetry stores the block id as its SHA-256 hash (block_project_id)
+    report["block"] = {
+        "id": args.block_id,
+        "project_id": hashlib.sha256(args.block_id.encode()).hexdigest() if args.block_id else "",
+    }
 
     report["cupy"] = detect_cupy()
     report["torch_cuda"] = detect_torch_cuda()

@@ -30,6 +30,7 @@ wf.body(func(args) {
 	}
 
 	b = b.arg("--seed").arg(string(args.seed))
+	b = b.arg("--block-id").arg(wf.getBlockId())
 	if args.matrixSize != undefined && args.matrixSize != "" {
 		b = b.arg("--matrix-size").arg(string(args.matrixSize))
 	}
