@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.gpu-test.gpu-info
 
+## 3.0.4
+
+### Patch Changes
+
+- 3de4101: The report prints the block id and its SHA-256 hash, the block_project_id of run telemetry, to find the run in Grafana.
+
 ## 3.0.3
 
 ### Patch Changes

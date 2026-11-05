@@ -1,5 +1,14 @@
 # @platforma-open/milaboratories.gpu-test.workflow
 
+## 0.6.5
+
+### Patch Changes
+
+- 3de4101: The report prints the block id and its SHA-256 hash, the block_project_id of run telemetry, to find the run in Grafana.
+- 9b8b004: SDK upgrade: workflow-tengo 6.20.0, so the commands of a block run report the block and its run in run telemetry.
+- Updated dependencies [3de4101]
+  - @platforma-open/milaboratories.gpu-test.gpu-info@3.0.4
+
 ## 0.6.4
 
 ### Patch Changes
