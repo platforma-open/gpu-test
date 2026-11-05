@@ -25,7 +25,7 @@ const data = reactive({
 });
 
 function rerun() {
-  app.model.args.seed = Math.floor(Math.random() * 2147483647);
+  app.model.data.seed = Math.floor(Math.random() * 2147483647);
 }
 </script>
 
@@ -45,7 +45,7 @@ function rerun() {
       <template #title>Settings</template>
 
       <PlDropdown
-        v-model="app.model.args.matrixSize"
+        v-model="app.model.data.matrixSize"
         label="Benchmark matrix size (approx. RAM/VRAM working set)"
         :options="[
           { value: '1000', label: '1000×1000 (~12 MB)' },
@@ -58,7 +58,7 @@ function rerun() {
       />
 
       <PlDropdown
-        v-model="app.model.args.gpuMemory"
+        v-model="app.model.data.gpuMemory"
         label="GPU memory (VRAM)"
         :options="[
           { value: '', label: 'No GPU' },
@@ -72,7 +72,7 @@ function rerun() {
       />
 
       <PlDropdown
-        v-model="app.model.args.cpu"
+        v-model="app.model.data.cpu"
         label="CPU cores"
         :options="[
           { value: '1', label: '1' },
@@ -85,7 +85,7 @@ function rerun() {
       />
 
       <PlDropdown
-        v-model="app.model.args.mem"
+        v-model="app.model.data.mem"
         label="RAM"
         :options="[
           { value: '1GiB', label: '1 GiB' },
@@ -99,7 +99,7 @@ function rerun() {
       />
 
       <PlNumberField
-        v-model="app.model.args.seed"
+        v-model="app.model.data.seed"
         label="Seed (change to re-run)"
         :minValue="0"
         :maxValue="2147483647"
